@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Login from '../Login/Login'
 import Register from '../Signup/Register'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import loginImg from '../../Assests/LoginImg/jobperson.jpg'
 import './AuthContainer.css'
 

@@ -11,7 +11,7 @@ export class Services{
 
     static loginUser(formData){
         const dataURL=`${this.serverURL}/auth/login`
-        return axios.post("http://localhost:8093/auth/login", formData, {
+        return axios.post(dataURL, formData, {
             withCredentials: true,
             headers: {
               'Content-Type': 'application/json'

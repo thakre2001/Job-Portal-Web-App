@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './Login.css'
-import googleLogo from '../../Assests/LoginImg/google-logo.png'
-import { Link, useNavigate } from 'react-router-dom'
+// import googleLogo from '../../Assests/LoginImg/google-logo.png'
+import { useNavigate } from 'react-router-dom'
 import * as YUP from 'yup'
 import { Services } from '../../BackendAPIs/Services'
 
