@@ -1,0 +1,39 @@
+.navbar{
+    z-index: 3;
+    background: white;
+    padding-bottom: 200px;
+    display: flex;
+}
+
+.navbar ul{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    padding: 10px;
+    flex-wrap: wrap;
+}
+
+.navbar ul li{
+    margin-right: 25px;
+    text-decoration: none;
+    color: black;
+}
+
+.navbar a{
+    display: inline-block;
+    text-decoration: none;
+    color: rgb(22, 133, 137);
+}
+
+@media screen  and (max-width : 400px){
+    .navbar{
+        font-size: 14px;
+        padding: 5px;
+    }
+
+    .navbar ul{
+        font-size: 14px;
+        padding: 5px;
+    }
+}

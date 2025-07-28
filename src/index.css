@@ -1,13 +1,143 @@
+* {
+  font-size: 1.1em;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background: gray;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  /* font-family: ; */
+}
+
+
+/* Registration form css */
+
+.register {
+  /* background: purple; */
+  padding: 20px;
+  height: 100%;
+  background: white;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.register .heading {
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.register .card {
+  background: rgb(232, 231, 231);
+}
+
+.register-btn {
+  width: 100%;
+  max-width: 350px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  font-size: 16px;
+  text-align: center;
+  background: #7494ec;
+  margin-top: 20px;
+}
+
+/* .register{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  padding:150px 0;
+  background: radial-gradient(circle, #f0f4ff, #e9e9e9);
+  overflow-y: auto;
+  
+}
+
+.register .left-side-structure{
+  width: 30%;
+  height: 120vh;
+  border: 12px solid rgba(68, 177, 236, 0.364);
+  position: absolute;
+  transform: rotate(120deg);
+  animation: slow-rotate1 30s linear infinite;
+}
+
+.register .left-side-structure,
+.register .left-side-structure2{
+  will-change: transform;
+  transform-origin: center;
+  z-index: 0;
+}
+
+@keyframes slow-rotate1 {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}
+.register .left-side-structure2{
+  width: 30%;
+  height: 120vh;
+  border: 12px solid rgba(229, 206, 163, 0.523);
+  position: absolute;
+  transform: rotate(240deg);
+  transform: translate(-50%,-50%);
+  animation: slow-rotate2 30s linear infinite;
+}
+
+@keyframes slow-rotate2 {
+  from {transform: rotate(360deg);}
+  to {transform: rotate(0deg);}
+}
+
+.register .register-form{
+  border: 1px solid;
+  padding: 20px 50px 20px 50px;
+  border-radius: 20px;
+  background: white;
+}
+.register span{
+  color: red;
+}
+.register label{
+  font-weight: 350;
+}
+.register input{
+  width: 100%;
+  border-radius: 20px;
+  padding: 8px 15px;
+  outline: none;
+  border: 0.5px solid;
+}
+
+.register .card{
+  background: aliceblue;
+} */
+
+/* Job page csss */
+.jobpage .banner-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.jobpage .banner-section .search-bar {
+  border: 3px solid rgb(31, 173, 185);
+  padding: 5px;
+  border-radius: 50px;
+  font-size: 1.2em;
+}
+
+.jobpage .search-bar input,
+select {
+  border: none;
+  outline: none;
+  padding: 10px;
 }
