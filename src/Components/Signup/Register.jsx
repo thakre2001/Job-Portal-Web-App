@@ -7,11 +7,11 @@ const Register = () => {
         name:null,
         email:null,
         mobile:null,
-        password:null,
-        workStatus:null
+        password:null
+        // workStatus:null
     })
     const [errors,setErrors]=useState({})
-    const [selectedStatus,setSelectedStatus]=useState('')
+    // const [selectedStatus,setSelectedStatus]=useState('')
 
     const handleChange=(e)=>{
         const {name,value}=e.target;
@@ -23,18 +23,18 @@ const Register = () => {
         })
     }
 
-    const selectWorkStatus=(status)=>{
-        setSelectedStatus(status)        
-        setFormData({...formData,workStatus:status})
-    }
+    // const selectWorkStatus=(status)=>{
+    //     setSelectedStatus(status)        
+    //     setFormData({...formData,workStatus:status})
+    // }
 
     const formValidations=YUP.object({
         name:YUP.string().required("Name is required"),
         email:YUP.string().email("Invalid email").required("Email is required"),
         mobile:YUP.string().matches(/^\d{10}$/, "Phone number must contain 10 digits")
         .required("Phone number is required"),
-        password:YUP.string().required("Password is required"),
-        workStatus:YUP.string().required("Choose any one")
+        password:YUP.string().required("Password is required")
+        // workStatus:YUP.string().required("Choose any one")
     })
 
     const handleSubmit=async(e)=>{

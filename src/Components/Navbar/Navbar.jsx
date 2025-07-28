@@ -3,9 +3,9 @@ import { Link, useLocation } from 'react-router-dom'
 import './Navbar.css'
 
 const Navbar = () => {
-    const location=useLocation()
+    // const location=useLocation()
 
-    const isRegisterPage=location.pathname === '/page/register'
+    // const isRegisterPage=location.pathname === '/page/register'
     return (
         <>
             <div className='container-fluid navbar position-fixed d-flex flex-nowrap justify-content-around'>
