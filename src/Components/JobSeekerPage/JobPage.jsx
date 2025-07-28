@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 const JobPage = () => {
 
-    const [jobExperience, setJobExperience] = useState("Select expereince")
+    // const [jobExperience, setJobExperience] = useState("Select expereince")
     return (
         <>
 
