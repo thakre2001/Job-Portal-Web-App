@@ -1,0 +1,192 @@
+.profile-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 80px;
+  background: #f5f8fa;
+  min-height: 100vh;
+  animation: fadeIn .8s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 8 8px 20px rgba(0, 0, 0, 0.8);
+  padding: 30px;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 1 12px 28px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.photo-container {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  /* overflow: hidden; */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.photo-container:hover {
+  transform: scale(1.05);
+}
+
+.profile-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}
+
+.edit-photo-label {
+  position: absolute;
+  right: 0px;
+  bottom: -6px;
+  background: #007bff;
+  color: white;
+  border-radius: 50%;
+  padding: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 2px solid #fff;
+  transition: background 0.3s ease;
+  /* z-index: ; */
+}
+
+.edit-photo-label:hover {
+  background: #0056b3;
+}
+
+.profile-body .info-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  animation: slideFade 0.5s ease-in;
+
+}
+
+@keyframes slideFade {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.profile-body label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.profile-body span {
+  font-size: 1rem;
+  color: #444;
+}
+
+.profile-body input,
+.profile-body select{
+  padding: 10px 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.profile-body input:focus,
+.profile-body select:focus{
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+}
+
+.resume-section input {
+  font-size: 0.95rem;
+  border: 1px dashed #ccc;
+  border-radius: 8px ;
+  padding: 10px ;
+  background: #fff;
+  transition: border-color 0.3s ease;
+}
+
+.resume-section input:hover{
+  border-color: #007bff;
+}
+
+.resume-section a.btn-outline-primary {
+  transition: all 0.3s ease;
+}
+
+.resume-section a.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.action-buttons .btn {
+  min-width: 100px;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.action-buttons .btn:hover {
+  transform: scale(1.05);
+}
+
+.crop-overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+@media (max-width: 576px) {
+  .profile-card {
+    padding: 20px;
+  }
+
+  .profile-wrapper {
+    padding-top: 60px;
+  }
+
+  .photo-container{
+    width: 80px;
+    height: 80px;
+  }
+}

@@ -1,8 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const JobPage = () => {
 
     // const [jobExperience, setJobExperience] = useState("Select expereince")
+
+    const [jobs, setJobs] = useState([
+        {
+            id: 1,
+            title: 'React Developer',
+            company: 'TechNova',
+            location: 'Remote',
+            salary: '$80k/year',
+            description: 'Work on front-end development with React and Redux.',
+        },
+        {
+            id: 2,
+            title: 'Java Backend Developer',
+            company: 'CodeCrafters',
+            location: 'Bangalore',
+            salary: '₹12 LPA',
+            description: 'Develop REST APIs using Spring Boot and Microservices.',
+        },
+    ])
     return (
         <>
 
@@ -93,7 +112,7 @@ const JobPage = () => {
                     </div>
                 </section>
             </div> */}
-            <div className="p-6 max-w-5xl mx-auto">
+            {/* <div className="p-6 max-w-5xl mx-auto">
                 <h2 className="text-3xl font-bold mb-6">Job Seeker Panel</h2>
 
                 <div className="grid md:grid-cols-2 gap-6">
@@ -130,6 +149,43 @@ const JobPage = () => {
                             </li>
                         </ul>
                     </div>
+                </div>
+            </div> */}
+
+            <div className="container jobpage-container" style={{ paddingTop: 100 }}>
+                <h2 className='text-center mb-4'>Explore Jobs</h2>
+
+                <div className="row">
+                    {
+                        jobs.map((job) => (
+                            <div className="col-md-6 mb-4" key={job.id}>
+                                <div className="card h-100 shadow-sw p-4">
+                                    <div className='d-flex justify-content-between'>
+                                        <div>
+                                            <h5 className='mb-1'>{job?.title}</h5>
+                                            <p className='text-muted'>{job?.company}</p>
+                                            <p className='text-secondary'>{job?.location}</p>
+                                            <p className='text-success fw-semibold'>{job?.salary}</p>
+                                            <p className='small text-muted'>{job?.description.slice(0, 100)}...</p>
+                                            <p></p>
+                                        </div>
+                                    </div>
+
+                                    <div className='mt-3 d-flex gap-2 justify-content-end'>
+                                        <button className='btn py-2 px-4 fs-5 btn-sm btn-outline-info'>
+                                            View Details
+                                        </button>
+                                        <button className='btn py-2 px-4 fs-5 btn-sm btn-primary'>
+                                            Apply
+                                        </button>
+                                        <button className='btn py-2 px-4 fs-5 btn-sm btn-outline-secondary'>
+                                            Share
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    }
                 </div>
             </div>
         </>

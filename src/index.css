@@ -26,6 +26,10 @@ code {
   justify-content: center;
 }
 
+.register p{
+  font-size: 14px;
+}
+
 .register .heading {
   font-weight: 600;
   font-size: 20px;

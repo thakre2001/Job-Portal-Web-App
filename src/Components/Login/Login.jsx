@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import './Login.css'
 // import googleLogo from '../../Assests/LoginImg/google-logo.png'
 import { useNavigate } from 'react-router-dom'
 import * as YUP from 'yup'
 import { Services } from '../../BackendAPIs/Services'
+import { UserContext } from '../UserContext'
 
 const Login = () => {
 
@@ -14,6 +15,8 @@ const Login = () => {
 
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+    
+    const {login}=useContext(UserContext)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -28,13 +31,25 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(formData);
+        
         try {
             await formvalidations.validate(formData, { abortEarly: false });
             const response = await Services.loginUser(formData);
             if (response.status !== 200) {
                 navigate('/page/login');
             }
+            console.log(response);
+            localStorage.setItem("token",response.data.token)
+            localStorage.setItem('user',JSON.stringify(response.data.user))
+            login(response.data)
             navigate('/page/jobpage');
+
+            setFormData({
+                email:'',
+                password:''
+            })
+
         } catch (error) {
             if (error?.inner) {
                 const newError = {};

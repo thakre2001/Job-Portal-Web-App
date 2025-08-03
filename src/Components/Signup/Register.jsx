@@ -1,17 +1,24 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import * as YUP from 'yup'
 import { Services } from '../../BackendAPIs/Services'
+import { UserContext } from '../UserContext'
+import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
+
+    const {login}=useContext(UserContext);
+
+    const navigate=useNavigate();
+
     const [formData,setFormData]=useState({
         name:null,
         email:null,
         mobile:null,
-        password:null
-        // workStatus:null
+        password:null,
+        workStatus:null
     })
     const [errors,setErrors]=useState({})
-    // const [selectedStatus,setSelectedStatus]=useState('')
+    const [selectedStatus,setSelectedStatus]=useState('')
 
     const handleChange=(e)=>{
         const {name,value}=e.target;
@@ -23,18 +30,18 @@ const Register = () => {
         })
     }
 
-    // const selectWorkStatus=(status)=>{
-    //     setSelectedStatus(status)        
-    //     setFormData({...formData,workStatus:status})
-    // }
+    const selectWorkStatus=(status)=>{
+        setSelectedStatus(status)        
+        setFormData({...formData,workStatus:status})
+    }
 
     const formValidations=YUP.object({
         name:YUP.string().required("Name is required"),
         email:YUP.string().email("Invalid email").required("Email is required"),
         mobile:YUP.string().matches(/^\d{10}$/, "Phone number must contain 10 digits")
         .required("Phone number is required"),
-        password:YUP.string().required("Password is required")
-        // workStatus:YUP.string().required("Choose any one")
+        password:YUP.string().required("Password is required"),
+        workStatus:YUP.string().required("Choose any one")
     })
 
     const handleSubmit=async(e)=>{
@@ -42,7 +49,21 @@ const Register = () => {
         try {
             await formValidations.validate(formData,{abortEarly:false})
             const response=await Services.addUser(formData);
-            console.log(response);            
+           
+            if(response.status!=200){
+                alert("Something Went wrong try again")
+            }
+
+            login(response.data)
+            navigate('/page/jobpage')
+
+            setFormData({
+                name:'',
+                email:'',
+                mobile:'',
+                workStatus:'',
+                password:'',
+            })
             
         } catch (error) {
             if(error?.inner){
@@ -119,7 +140,7 @@ const Register = () => {
                             <i className='fa fa-phone'></i>
                         </div>
                         {errors.mobile && <div className='error-message'>{errors.mobile}</div>}
-                        {/* <div className='mt-3 row d-flex justify-content-center'>
+                        <div className='mt-3 row d-flex justify-content-center'>
                             <p>Work Status<span>*</span></p>
                             <div className="col-md-5 col-6" onClick={()=>{selectWorkStatus("Experienced")}}>
                                 <div className={`card p-3 ${selectedStatus==="Experienced" ? 'bg-success': 'bg-secondary'}`}>
@@ -132,7 +153,7 @@ const Register = () => {
                                 </div>
                             </div>
                         </div>
-                        {errors.workStatus && <div className='text-danger'>{errors.workStatus}</div>} */}
+                        {errors.workStatus && <div className='text-danger'>{errors.workStatus}</div>}
                         <div className='mt-3'>
                             <button className='register-btn' onClick={handleSubmit}>Register now</button>
                         </div>

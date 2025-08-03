@@ -6,20 +6,36 @@ import Home from './Components/Homepage/Home';
 import Register from './Components/Signup/Register';
 import JobPage from './Components/JobSeekerPage/JobPage';
 import AuthContainer from './Components/AuthContainer/AuthContainer';
+import Profile from './Components/ProfilePage/Profile';
+import { UserContext, UserProvider } from './Components/UserContext';
+import JobPostForm from './Components/JobPostForm/JobPostForm';
+import { useContext } from 'react';
 
-function App() {
+function AppContent() {
+  return (
+    <>
+        <Navbar/>
+        <Routes>
+          <Route path='/' element={<Navigate to="/page/home" />} />
+          <Route path='/page/login' element={<AuthContainer />} />
+          <Route path='/page/home' element={<Home />} />
+          <Route path='/page/register' element={<Register />} />
+          <Route path='/page/jobpage' element={<JobPage />} />
+          <Route path='/page/profile' element={<Profile />} />
+          <Route path='/page/jobpostform' element={<JobPostForm/>}/>
+        </Routes>
+    </>
+  );
+}
+
+function App(){
   return (
     <div className="App">
-      <Navbar/>
-        <Routes>
-          <Route path='/' element={<Navigate to="/page/home"/>}/>
-          <Route path='/page/login' element={<AuthContainer/>}/>
-          <Route path='/page/home' element={<Home/>}/>
-          <Route path='/page/register' element={<Register/>}/>
-          <Route path='/page/jobpage' element={<JobPage/>}/>
-        </Routes>
+      <UserProvider>
+        <AppContent/>
+      </UserProvider>
     </div>
-  );
+  )
 }
 
 export default App;
