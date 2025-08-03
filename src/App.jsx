@@ -7,9 +7,8 @@ import Register from './Components/Signup/Register';
 import JobPage from './Components/JobSeekerPage/JobPage';
 import AuthContainer from './Components/AuthContainer/AuthContainer';
 import Profile from './Components/ProfilePage/Profile';
-import { UserContext, UserProvider } from './Components/UserContext';
+import {  UserProvider } from './Components/UserContext';
 import JobPostForm from './Components/JobPostForm/JobPostForm';
-import { useContext } from 'react';
 
 function AppContent() {
   return (

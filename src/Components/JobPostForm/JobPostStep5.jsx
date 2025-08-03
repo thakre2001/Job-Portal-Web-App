@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 const JobPostStep5 = ({ formData, handleChange, nextStep, previousStep }) => {
     return (

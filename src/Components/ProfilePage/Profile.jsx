@@ -8,14 +8,12 @@ import defaultProfileImage from '../../Assests/defaultprofile.jpg'
 
 const Profile = () => {
   const { user, setUser, token } = useContext(UserContext)
-  const navigate = useNavigate()
 
   const [editMode, setEditMode] = useState(false);
   const [formValues, setFormValues] = useState(user);
 
   const [resume, setResume] = useState(user?.resume);
   const [resumeURL, setResumeURL] = useState(null);
-  const fileType=resume?.name?.split('.').pop().toLowerCase();
 
   const fileInputRef = useRef(null)
   const [profilePhoto, setProfilePhoto] = useState(user?.profilePhoto || null);
@@ -107,7 +105,7 @@ const Profile = () => {
 
     try {
       const response = await Services.updateUser(formValues, token);
-      if (response.status == 200) {
+      if (response.status === 200) {
         setUser(response.data)
         localStorage.setItem('user', JSON.stringify(response.data))
       }
@@ -132,7 +130,7 @@ const Profile = () => {
 
     try {
       const response = Services.uploadResume(formData, token)
-      if (response.status == 200) {
+      if (response.status === 200) {
         console.log('resume', response);
         setUser(response.data)
         localStorage.setItem('user', JSON.stringify(response.data))

@@ -50,7 +50,7 @@ const Register = () => {
             await formValidations.validate(formData,{abortEarly:false})
             const response=await Services.addUser(formData);
            
-            if(response.status!=200){
+            if(response.status!==200){
                 alert("Something Went wrong try again")
             }
 

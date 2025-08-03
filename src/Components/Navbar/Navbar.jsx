@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import { UserContext } from '../UserContext';
-import { Services } from '../../BackendAPIs/Services';
 import defaultProfileImage from '../../Assests/defaultprofile.jpg'
 // import profileAvatar from '../../assets/avatar.png'; // add avatar image
 
@@ -12,7 +11,7 @@ const Navbar = () => {
 
   const [navOpen, setNavOpen] = useState(false)
 
-  const { user, logout, token, setUser } = useContext(UserContext)
+  const { user, logout} = useContext(UserContext)
 
   const toggleNav = () => {
     setNavOpen(!navOpen)
