@@ -3,7 +3,6 @@ import './Profile.css';
 import { UserContext } from '../UserContext';
 import ImageCropper from '../CropperComponents/ImageCropper';
 import { Services } from '../../BackendAPIs/Services';
-import { useNavigate } from 'react-router-dom';
 import defaultProfileImage from '../../Assests/defaultprofile.jpg'
 
 const Profile = () => {
@@ -11,8 +10,6 @@ const Profile = () => {
 
   const [editMode, setEditMode] = useState(false);
   const [formValues, setFormValues] = useState(user);
-
-  const [resume, setResume] = useState(user?.resume);
   const [resumeURL, setResumeURL] = useState(null);
 
   const fileInputRef = useRef(null)
@@ -122,7 +119,6 @@ const Profile = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setResume(file);
     setResumeURL(URL.createObjectURL(file));
 
     const formData = new FormData();
