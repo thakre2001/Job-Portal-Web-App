@@ -4,7 +4,7 @@ const JobPage = () => {
 
     // const [jobExperience, setJobExperience] = useState("Select expereince")
 
-    const [jobs, setJobs] = useState([
+    const [jobs] = useState([
         {
             id: 1,
             title: 'React Developer',
