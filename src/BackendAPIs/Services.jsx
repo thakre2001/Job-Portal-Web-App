@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export class Services {
-  static serverURL = "http://localhost:8093/auth"
+  static serverURL = "https://job-portal-backend-kirr.onrender.com/auth"
 
 
   static addUser(formData) {
