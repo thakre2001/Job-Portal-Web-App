@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './Profile.css';
 import { UserContext } from '../UserContext';
 import ImageCropper from '../CropperComponents/ImageCropper';
