@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Profile.css';
 import { UserContext } from '../UserContext';
 import ImageCropper from '../CropperComponents/ImageCropper';
@@ -11,6 +11,8 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [formValues, setFormValues] = useState(user);
   const [resumeURL, setResumeURL] = useState(null);
+
+  const fileInputRef = useRef(null)
   const [profilePhoto, setProfilePhoto] = useState(user?.profilePhoto || null);
   const [profilePhotoURL, setProfilePhotoURL] = useState(user?.profilePhoto || null)
   const [cropMode, setCropMode] = useState(false);
@@ -152,12 +154,13 @@ const Profile = () => {
                 }
               }}
             />
-            <label htmlFor="profile-upload" className='edit-photo-label'>
+            <label htmlFor="profile-upload" className='edit-photo-label' onClick={() => fileInputRef.current.click()}>
               <i className='fa fa-camera'></i>
             </label>
             <input type="file"
               name={profilePhoto}
               accept='image/*'
+              ref={fileInputRef}
               onChange={handleProfilePhotoChange}
 
               style={{ display: 'none' }}
