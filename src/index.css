@@ -24,6 +24,7 @@ code {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  font-size: 15px;
 }
 
 .register p{
@@ -50,6 +51,19 @@ code {
   text-align: center;
   background: #7494ec;
   margin-top: 20px;
+}
+
+@media screen and (max-width:600px){
+  .login{
+    font-size: 14px;
+  }
+  
+}
+
+@media screen and (max-width:400px) {
+  .register{
+    font-size: 12px;
+  }
 }
 
 /* .register{

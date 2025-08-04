@@ -41,15 +41,25 @@ const Navbar = () => {
     setShowSidebar(!showSidebar);
   };
 
+  const closeNavBar=()=>{
+    setNavOpen(false)
+  }
+
   const goToProfile = () => {
     setShowSidebar(false);
+    setNavOpen(false)
     navigate('/page/profile');
   };
 
   const closePage = () => {
     logout()
     setShowSidebar(false)
+    setNavOpen(false)
   }
+
+  document.querySelector('Link').addEventListener('click',()=>{
+    setNavOpen(false)
+  })
 
   return (
     <>
@@ -68,14 +78,14 @@ const Navbar = () => {
 
           <div className={`navbar-links ${navOpen ? 'show' : ''}`}>
             <ul className={`nav-list d-flex`}>
-              <li><Link to="/page/jobpage">Jobs</Link></li>
-              <li><Link to="/page/companies">Companies</Link></li>
-              <li><Link to="/page/services">Services</Link></li>
+              <li><Link to="/page/jobpage" onClick={closeNavBar}>Jobs</Link></li>
+              <li><Link to="/page/companies" onClick={closeNavBar}>Companies</Link></li>
+              <li><Link to="/page/services" onClick={closeNavBar}>Services</Link></li>
             </ul>
 
             <div className='d-flex align-items-center me-4 gap-3'>
               {
-                !user && <Link to="/page/login" className='btn btn-outline-primary fs-4 rounded-pill px-4'>Login</Link>
+                !user && <Link to="/page/login" onClick={closeNavBar} className='btn btn-outline-primary fs-4 rounded-pill px-4'>Login</Link>
               }
 
               {
@@ -86,10 +96,10 @@ const Navbar = () => {
                     <div className='employee-buttons'>
                       <ul>
                         <li>
-                          <Link to={'/page/jobpostform'} className='employee-btn'>Post a job</Link>
+                          <Link to={'/page/jobpostform'} onClick={closeNavBar} className='employee-btn'>Post a job</Link>
                         </li>
                         <li>
-                          <Link className='employee-btn'>Employer login</Link>
+                          <Link className='employee-btn' onClick={closeNavBar}>Employer login</Link>
                         </li>
                       </ul>
                     </div>

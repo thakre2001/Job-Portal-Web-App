@@ -6,6 +6,7 @@ html {
     padding: 20px;
     /* max-width: 400px; */
     width: 100%;
+    font-size: 15px;
 }
 
 .login h2 {
@@ -23,7 +24,7 @@ input {
     border-radius: 8px;
     border: none;
     padding: 8px 50px 8px 20px;
-    font-size: 16px;
+    font-size: 15px;
     background: rgb(232, 231, 231);
 }
 
@@ -59,7 +60,7 @@ input::placeholder {
 }
 
 .login .login-btn {
-    background:#7494ec;
+    background: #7494ec;
     margin-top: 20px;
     font-weight: 400;
     font-size: 20px;
@@ -79,7 +80,7 @@ input::placeholder {
     background-color: white;
     width: 100%;
     max-width: 320px;
-    margin: 0 auto;
+    margin: 10px auto;
 }
 
 .google-login:hover {
@@ -91,7 +92,7 @@ input::placeholder {
     height: 20px;
 }
 
-.error-message{
+.error-message {
     color: rgb(173, 85, 85);
     font-size: 14px;
     text-align: start;
@@ -108,39 +109,52 @@ input::placeholder {
     background: white; */
 }
 
-@media screen and (max-width:600px){
-    .login{
-        padding: 60px;
+@media screen and (max-width:600px) {
+    .login {
+        padding: 40px;
+        font-size: 14px;
     }
 }
 
-@media screen and (max-width : 400px){
+@media screen and (max-width : 400px) {
 
-    .login{
-        font-size: 14px;
+    .login {
+        font-size: 12px;
+        padding: 2px;
     }
 
-    .login h2{
+    .login h2 {
         font-size: 20px;
     }
 
-    input{
-    padding: 4px 30px 4px 20px;
-    color: #333;
-    font-weight: 400;
-    background: rgb(232, 231, 231);
+    input {
+        padding: 8px 40px 8px 20px;
+        color: #333;
+        font-weight: 400;
+        font-size: 12px;
+        background: rgb(232, 231, 231);
     }
 
-    input::placeholder{
+    input::placeholder {
         font-size: 16px;
     }
 
-    .forgot-btn{
+    .forgot-btn {
         font-size: 14px;
     }
 
-    .login .login-btn{
+    .login .login-btn {
         font-size: 14px;
+        padding: 8px 0;
+        width: 70%;
     }
+
+    .google-login {
+    padding: 5px 10px;
+    font-size: 14px;
+    gap: 10px;
+    width: 70%;
+    max-width: 320px;
+}
 
 }

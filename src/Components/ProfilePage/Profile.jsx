@@ -156,15 +156,14 @@ const Profile = () => {
             />
             <label htmlFor="profile-upload" className='edit-photo-label'>
               <i className='fa fa-camera'></i>
-              <input type="file"
-                name={profilePhoto}
-                accept='image/*'
-                ref={fileInputRef}
-                onChange={handleProfilePhotoChange}
-
-                style={{ display: 'none' }}
-                id="profile-upload" />
             </label>
+            <input type="file"
+              name={profilePhoto}
+              accept='image/*'
+              onChange={handleProfilePhotoChange}
+
+              style={{ display: 'none' }}
+              id="profile-upload" />
           </div>
           <div>
             <h3 className="mb-0">{user?.name}</h3>
@@ -262,7 +261,7 @@ const Profile = () => {
             accept=".pdf"
             className="form-control"
             onChange={handleFileChange}
-          placeholder='Only pdf file is allowed'
+            placeholder='Only pdf file is allowed'
           />
           {user?.resume && (
             <div className="mt-3 d-flex justify-content-between align-items-center">

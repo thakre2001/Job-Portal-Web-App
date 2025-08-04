@@ -20,6 +20,8 @@ const Register = () => {
     const [errors,setErrors]=useState({})
     const [selectedStatus,setSelectedStatus]=useState('')
 
+    const [showPass,setShowPass]=useState(false)
+
     const handleChange=(e)=>{
         const {name,value}=e.target;
         setFormData({
@@ -66,6 +68,7 @@ const Register = () => {
             })
             
         } catch (error) {
+            alert('Server problem')
             if(error?.inner){
                 const newError={}
                 error.inner.forEach((err)=>{
@@ -120,13 +123,13 @@ const Register = () => {
                         
                         <div className='input-field mt-3'>
                             <input 
-                            type="password" 
+                            type={`${showPass?'text':"password" }`}
                             name="password" 
                             id="" 
                             onChange={handleChange}
                             placeholder='Password' 
                             />
-                            <i className='fa fa-lock'></i>
+                            <i className='fa fa-lock' style={{cursor:'pointer'}} onClick={()=>setShowPass(!showPass)}></i>
                         </div>
                         {errors.password && <div className='error-message'>{errors.password}</div>}
                         <div className='input-field mt-3'>

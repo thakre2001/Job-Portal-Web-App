@@ -1,4 +1,4 @@
-import React, { createContext,  useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Services } from "../BackendAPIs/Services";
 
@@ -33,16 +33,22 @@ export const UserProvider = ({ children }) => {
 
         if (storedToken) {
             setToken(storedToken);
-            
-            Services.getUserProfile(storedToken).then((res)=>{
+
+            Services.getUserProfile(storedToken).then((res) => {
                 setUser(res.data)
-                localStorage.setItem('user',JSON.stringify(res.data))
+                localStorage.setItem('user', JSON.stringify(res.data))
+            }).catch((err) => {
+                console.error("Failed to fetch user profile", err)
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                setUser(null);
+                setToken(null);
             })
         }
     }, []);
 
     return (
-        <UserContext.Provider value={{ token, user, login, logout ,setToken, setUser}}>
+        <UserContext.Provider value={{ token, user, login, logout, setToken, setUser }}>
             {children}
         </UserContext.Provider>
     )

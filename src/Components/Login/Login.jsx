@@ -16,6 +16,8 @@ const Login = () => {
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
     
+    const [showPass,setShowPass]=useState(false)
+    
     const {login}=useContext(UserContext)
 
     const handleChange = (e) => {
@@ -79,12 +81,12 @@ const Login = () => {
 
                     <div className='input-field mb-4'>
                         <input
-                            type="password"
+                            type={`${showPass?'text':"password"}`}
                             name='password'
                             onChange={handleChange}
                             placeholder='password'
                         />
-                        <i className='fa fa-lock'></i>
+                        <i className='fa fa-lock' style={{cursor:'pointer'}} onClick={()=>setShowPass(!showPass)}></i>
                         {errors.password && <div className='error-message'>{errors.password}</div>}
                     </div>
 
@@ -101,7 +103,7 @@ const Login = () => {
 
                     <div className='text-center mb-3'>
                         <p className='mb-1'>Or</p>
-                        <div className='google-login shadow'>
+                        <div className='google-login'>
                             <img src='//static.naukimg.com/s/5/105/i/ic-google.png' alt="Google login" />
                             <span>Sign in with Google</span>
                         </div>
