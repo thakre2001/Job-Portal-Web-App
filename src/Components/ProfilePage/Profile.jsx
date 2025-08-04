@@ -11,8 +11,6 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [formValues, setFormValues] = useState(user);
   const [resumeURL, setResumeURL] = useState(null);
-
-  const fileInputRef = useRef(null)
   const [profilePhoto, setProfilePhoto] = useState(user?.profilePhoto || null);
   const [profilePhotoURL, setProfilePhotoURL] = useState(user?.profilePhoto || null)
   const [cropMode, setCropMode] = useState(false);
