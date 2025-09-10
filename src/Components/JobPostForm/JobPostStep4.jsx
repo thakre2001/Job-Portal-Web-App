@@ -2,81 +2,107 @@ import React from 'react'
 
 const JobPostStep4 = ({ formData, handleChange, nextStep, previousStep }) => {
     return (
-        <div className='container-fluid'>
-            <div className="card shadow-sm p-4">
-                <h2 className="mb-4 text-primary">Contact & Application Settings</h2>
+        <div>
+            <div className="card p-4 shadow-sm">
+                <h2 className="mb-4 text-primary">Salary & Benefits</h2>
 
-                <form className="p-4 rounded-3 fs-4">
+                <form className="row g-3 fs-4 p-4">
 
-                    <div className="mb-3">
-                        <label htmlFor="contactName" className="form-label">Contact Person Name</label>
-                        <input type="text" className="form-control" id="contactName" placeholder="Enter full name" />
-                    </div>
+                    <div className="col-12 mb-3">
+                        <label className="form-label">Salary Range (₹)</label>
 
-                    <div className="mb-3">
-                        <label htmlFor="contactEmail" className="form-label">Contact Email</label>
-                        <input type="email" className="form-control" id="contactEmail" placeholder="example@company.com" />
-                    </div>
+                        <div className="row g-2 align-items-center">
+                            <div className="col-md-3">
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Min Salary"
+                                    name='salaryMin'
+                                    min={0}
+                                    step={1000}
+                                    value={formData.salaryMin}
+                                    onChange={handleChange}
+                                />
+                            </div>
 
-                    <div className="mb-3">
-                        <label htmlFor="contactPhone" className="form-label">Contact Phone</label>
-                        <input type="tel" className="form-control" id="contactPhone" placeholder="e.g. +91 9876543210" />
-                    </div>
-
-                    <div className="mb-3">
-                        <label className="form-label d-block">How to Apply</label>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="radio" name="applyMode" id="applyInternal" value="internal" />
-                            <label className="form-check-label" htmlFor="applyInternal">Via this platform</label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="radio" name="applyMode" id="applyExternal" value="external" />
-                            <label className="form-check-label" htmlFor="applyExternal">External Link</label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="radio" name="applyMode" id="applyEmail" value="email" />
-                            <label className="form-check-label" htmlFor="applyEmail">Email</label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="radio" name="applyMode" id="applyWalkin" value="walkin" />
-                            <label className="form-check-label" htmlFor="applyWalkin">Walk-In</label>
+                            <div className="col-md-3">
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Max Salary"
+                                    name='salaryMax'
+                                    min={0}
+                                    step={1000}
+                                    value={formData.salaryMax}
+                                    onChange={handleChange}
+                                />
+                            </div>
                         </div>
                     </div>
 
-                    <div className="mb-3">
-                        <label htmlFor="applicationLink" className="form-label">Application Link</label>
-                        <input type="url" className="form-control" id="applicationLink" placeholder="https://apply.example.com" />
+
+                    <div className="col-12">
+                        <label className="form-label d-block">Is Salary Negotiable?</label>
+                        <div className="form-check form-check-inline">
+                            <input className="form-check-input"
+                                type="radio" name="salaryNegotiable"
+                                id="negotiableYes"
+                                value="true"
+                                onChange={(e) => {
+                                    handleChange({
+                                        target: { name: "salaryNegotiable", value: e.target.value === "true" }
+                                    })
+                                }
+                                } />
+                            <label className="form-check-label" htmlFor="negotiableYes">Yes</label>
+                        </div>
+                        <div className="form-check form-check-inline">
+                            <input className="form-check-input" type="radio"
+                                name="salaryNegotiable"
+                                id="negotiableNo"
+                                value="false"
+                                onChange={(e) => {
+                                    handleChange({
+                                        target: { name: "salaryNegotiable", value: e.target.value === "true" }
+                                    })
+                                }
+                                }
+                            />
+                            <label className="form-check-label" htmlFor="negotiableNo">No</label>
+                        </div>
                     </div>
 
-                    <div className="mb-3">
-                        <label className="form-label d-block">Resume Upload Required</label>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="radio" name="resumeRequired" id="resumeYes" value="yes" />
-                            <label className="form-check-label" htmlFor="resumeYes">Yes</label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="radio" name="resumeRequired" id="resumeNo" value="no" />
-                            <label className="form-check-label" htmlFor="resumeNo">No</label>
-                        </div>
+                    <div className="col-md-6">
+                        <label htmlFor="bonus" className="form-label">Incentives / Bonus</label>
+                        <input type="text" className="form-control" name='bonuses' id="bonus" onChange={handleChange} placeholder="e.g., Performance bonus, stock options" />
                     </div>
 
-                    <div className="mb-3">
-                        <label className="form-label d-block">Cover Letter Required</label>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="radio" name="coverLetterRequired" id="coverYes" value="yes" />
-                            <label className="form-check-label" htmlFor="coverYes">Yes</label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="radio" name="coverLetterRequired" id="coverNo" value="no" />
-                            <label className="form-check-label" htmlFor="coverNo">No</label>
-                        </div>
+                    <div className="col-md-6">
+                        <label htmlFor="perks" className="form-label">Perks & Benefits</label>
+                        <select className="form-select py-3" name='perks' value={formData.perks}
+                         onChange={(e)=>{
+                            const selected=Array.from(e.target.selectedOptions,option=>option.value)
+                            handleChange({
+                                target:{
+                                    name:"perks",
+                                    value:selected
+                                }
+                            })
+                         }} id="perks">
+                            <option value="">Select benefit</option>
+                            <option value="insurance">Health Insurance</option>
+                            <option value="flexible">Flexible Hours</option>
+                            <option value="hybrid">Hybrid Work</option>
+                            <option value="gym">Gym Membership</option>
+                            <option value="others">Others</option>
+                        </select>
                     </div>
 
                 </form>
 
                 <div className="d-flex justify-content-between mt-4">
-                    <button className="btn btn-info py-2 px-5" onClick={previousStep}>Previous</button>
-                    <button className="btn btn-primary py-2 px-5" onClick={nextStep}>Next</button>
+                    <button className="btn btn-info px-5 py-2" onClick={previousStep}>Previous</button>
+                    <button className="btn btn-primary px-5 py-2" onClick={nextStep}>Next</button>
                 </div>
             </div>
 

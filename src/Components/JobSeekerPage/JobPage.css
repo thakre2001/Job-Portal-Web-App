@@ -1,0 +1,46 @@
+/* Job search */
+.job-search-bar {
+    /* display: flex; */
+    position: relative;
+    width: 300px;
+}
+
+.job-search-field {
+    position: relative;
+    font-size: 1.2rem;
+}
+
+.job-search-btn{
+    position: absolute;
+    right: 10px;
+    top: 40%;
+    transform: translateY(-50%);
+    border: none;
+    outline: none;
+    /* padding: 5px; */
+    background: transparent;
+}
+
+.job-search-btn i{
+    font-size: 1.4rem;
+}
+
+.jobpage-wrapper {
+  min-height: 100vh;
+  padding-top: 50px;
+}
+
+.hero-banner {
+  background: linear-gradient(135deg, #007bff 40%, #00c6ff 100%);
+  color: white;
+}
+
+.job-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 12px;
+}
+
+.job-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}

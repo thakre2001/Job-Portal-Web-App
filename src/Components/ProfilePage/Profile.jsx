@@ -4,9 +4,11 @@ import { UserContext } from '../UserContext';
 import ImageCropper from '../CropperComponents/ImageCropper';
 import { Services } from '../../BackendAPIs/Services';
 import defaultProfileImage from '../../Assests/defaultprofile.jpg'
+import EducationForm from '../EducationPage/EducationForm';
+import ExperienceForm from '../ExperiencePage/ExperienceForm';
 
 const Profile = () => {
-  const { user, setUser, token } = useContext(UserContext)
+  const { user, setUser, token, skills } = useContext(UserContext)
 
   const [editMode, setEditMode] = useState(false);
   const [formValues, setFormValues] = useState(user);
@@ -97,11 +99,18 @@ const Profile = () => {
     setFormValues(user);
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
   const handleSaveClick = async () => {
     setEditMode(false);
 
     try {
-      const response = await Services.updateUser(formValues, token);
+      const { education, experience, skills, ...basicValues } = formValues;
+
+      const response = await Services.updateUser(basicValues, token);
       if (response.status === 200) {
         setUser(response.data)
         localStorage.setItem('user', JSON.stringify(response.data))
@@ -110,11 +119,6 @@ const Profile = () => {
     } catch (error) {
 
     }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
   };
 
   const handleFileChange = (e) => {
@@ -138,119 +142,175 @@ const Profile = () => {
 
   return (
     <div className="profile-wrapper">
-      <div className="profile-card shadow-lg">
-        <div className="profile-header d-flex align-items-center gap-3">
+      <div className="profile-card bg-light">
+        <div className="profile-header bg-white d-flex gap-3">
           {/* Optional Avatar */}
-          <div className="photo-container" >
-            <img
-              src={`${user?.profilePhoto ? profilePhotoURL : defaultProfileImage}`}
-              className='profile-photo'
-              alt="profile"
-              // onClick={() => fileInputRef.current.click()}
-              onClick={() => {
-                if (user?.profilePhoto) {
-                  setTempPhotoURL(`data:image/jpeg;base64,${user?.profilePhoto}`)
-                  setCropMode(true)
+          <div className='d-flex align-items-center gap-3'>
+            <div className="photo-container" >
+              <img
+                src={`${user?.profilePhoto ? profilePhotoURL : defaultProfileImage}`}
+                className='profile-photo'
+                alt="profile"
+                // onClick={() => fileInputRef.current.click()}
+                onClick={() => {
+                  if (user?.profilePhoto) {
+                    setTempPhotoURL(`data:image/jpeg;base64,${user?.profilePhoto}`)
+                    setCropMode(true)
+                  }
+                }}
+              />
+              <label htmlFor="profile-upload" className='edit-photo-label' onClick={() => fileInputRef.current.click()}>
+                <i className='fa fa-camera'></i>
+              </label>
+              <input type="file"
+                name={profilePhoto}
+                accept='image/*'
+                ref={fileInputRef}
+                onChange={handleProfilePhotoChange}
+                style={{ display: 'none' }}
+                id="profile-upload" />
+            </div>
+            <div>
+              {editMode ? (
+                <input
+                  type="text"
+                  name="name"
+                  value={formValues?.name}
+                  onChange={handleChange}
+                // className="form-control"
+                />
+              ) : (
+                <p className='fs-3 fw-bold'>{user?.name}</p>
+              )}
+            </div>
+          </div>
+
+          <div className='p-4'>
+            <div className="info-row gap-2">
+              <i className='fa fa-envelope'></i>
+              {editMode ? (
+                <input
+                  disabled
+                  type="email"
+                  name="email"
+                  value={formValues?.email}
+                // className="form-control"
+                />
+              ) : (
+                <span>{user?.email}</span>
+              )}
+            </div>
+
+            <div className="info-row gap-2">
+              <i className='fa fa-phone'></i>
+              {editMode ? (
+                <input
+                  type="tel"
+                  name="mobile"
+                  value={formValues?.mobile}
+                  onChange={handleChange}
+                // className="form-control"
+                />
+              ) : (
+                <span>{user?.mobile}</span>
+              )}
+            </div>
+
+            <div className="info-row gap-2">
+              <i className='fa fa-briefcase'></i>
+              {editMode ? (
+                <select
+                  name="workStatus"
+                  value={formValues?.workStatus}
+                  onChange={handleChange}
+                // className="form-select"
+                >
+                  <option value="FRESHER">Fresher</option>
+                  <option value="EXPERIENCED">Experienced</option>
+                </select>
+              ) : (
+                <span>{user?.workStatus}</span>
+              )}
+            </div>
+            <div className="action-buttons mt-3 text-end">
+              {editMode ? (
+                <>
+                  <button className="btn btn-secondary me-2" onClick={handleCancelClick}>
+                    Cancel
+                  </button>
+                  <button className="btn btn-success" onClick={handleSaveClick}>
+                    Save
+                  </button>
+                </>
+              ) : (
+                <button className="btn btn-primary" onClick={handleEditClick}>
+                  Edit Profile
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="profile-body p-2 px-5">
+
+        </div>
+
+        {/* Experiences */}
+        <div className="mb-6">
+          <ExperienceForm />
+        </div>
+
+        {/* Education */}
+        <div>
+          <EducationForm />
+        </div>
+
+        {/* ===== Skills Section ===== */}
+        <div className="skills-section bg-white p-4 shadow-md">
+          <h5>Skills</h5>
+          <div className="d-flex flex-wrap gap-2 mb-2">
+            {user?.skills?.map((skill, index) => (
+              <span key={`${skill.id}-${index}`} className="badge bg-secondary d-flex align-items-center">
+                {skill.name}
+                <i
+                  className="fa fa-times ms-2"
+                  style={{ cursor: "pointer" }}
+                  onClick={async () => {
+                    const skillId = skill.id
+                    console.log(skillId);
+
+                    const res = await Services.removeSkill(skillId, token);
+                    setUser(res.data)
+
+                  }}
+                />
+              </span>
+            ))}
+          </div>
+
+          <div className="d-flex gap-2">
+            <select
+              className="form-select"
+              onChange={async (e) => {
+                const skillId = e.target.value;
+                if (skillId) {
+                  const res = await Services.addSkill(skillId, token);
+                  // refresh user
+                  setUser(res.data)
+
+                  e.target.value = "";
                 }
               }}
-            />
-            <label htmlFor="profile-upload" className='edit-photo-label' onClick={() => fileInputRef.current.click()}>
-              <i className='fa fa-camera'></i>
-            </label>
-            <input type="file"
-              name={profilePhoto}
-              accept='image/*'
-              ref={fileInputRef}
-              onChange={handleProfilePhotoChange}
-
-              style={{ display: 'none' }}
-              id="profile-upload" />
+            >
+              <option value="">Select Skill</option>
+              {/* dynamically load skills from backend */}
+              {skills?.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
           </div>
-          <div>
-            <h3 className="mb-0">{user?.name}</h3>
-            <p className="text-muted">{user?.role}</p>
-          </div>
-        </div>
-
-        <div className="profile-body">
-          <div className="info-row">
-            <label>Name:</label>
-            {editMode ? (
-              <input
-                type="text"
-                name="name"
-                value={formValues?.name}
-                onChange={handleChange}
-              // className="form-control"
-              />
-            ) : (
-              <span>{user?.name}</span>
-            )}
-          </div>
-
-          <div className="info-row">
-            <label>Email:</label>
-            {editMode ? (
-              <input
-                type="email"
-                name="email"
-                value={formValues?.email}
-                onChange={handleChange}
-              // className="form-control"
-              />
-            ) : (
-              <span>{user?.email}</span>
-            )}
-          </div>
-
-          <div className="info-row">
-            <label>Mobile:</label>
-            {editMode ? (
-              <input
-                type="tel"
-                name="mobile"
-                value={formValues?.mobile}
-                onChange={handleChange}
-              // className="form-control"
-              />
-            ) : (
-              <span>{user?.mobile}</span>
-            )}
-          </div>
-
-          <div className="info-row">
-            <label>Work Status:</label>
-            {editMode ? (
-              <select
-                name="workStatus"
-                value={formValues?.workStatus}
-                onChange={handleChange}
-              // className="form-select"
-              >
-                <option value="FRESHER">Fresher</option>
-                <option value="EXPERIENCED">Experienced</option>
-              </select>
-            ) : (
-              <span>{user?.workStatus}</span>
-            )}
-          </div>
-        </div>
-
-        <div className="action-buttons mt-3 text-end">
-          {editMode ? (
-            <>
-              <button className="btn btn-secondary me-2" onClick={handleCancelClick}>
-                Cancel
-              </button>
-              <button className="btn btn-success" onClick={handleSaveClick}>
-                Save
-              </button>
-            </>
-          ) : (
-            <button className="btn btn-primary" onClick={handleEditClick}>
-              Edit Profile
-            </button>
-          )}
         </div>
 
         <hr />

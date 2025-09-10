@@ -11,7 +11,7 @@ const Navbar = () => {
 
   const [navOpen, setNavOpen] = useState(false)
 
-  const { user, logout} = useContext(UserContext)
+  const { user, logout } = useContext(UserContext)
 
   const toggleNav = () => {
     setNavOpen(!navOpen)
@@ -41,14 +41,20 @@ const Navbar = () => {
     setShowSidebar(!showSidebar);
   };
 
-  const closeNavBar=()=>{
+  const closeNavBar = () => {
     setNavOpen(false)
   }
 
   const goToProfile = () => {
     setShowSidebar(false);
     setNavOpen(false)
-    navigate('/page/profile');
+    if (user.role === 'USER') {
+      navigate('/page/jobseeker-profile')
+    } else if (user.role === 'RECRUITER') {
+      navigate('/page/recruiter-profile')
+    } else {
+      navigate('/page/admin-profile')
+    }
   };
 
   const closePage = () => {
@@ -57,7 +63,17 @@ const Navbar = () => {
     setNavOpen(false)
   }
 
-  document.querySelector('Link').addEventListener('click',()=>{
+  const appliedJobs = () => {
+    setShowSidebar(false)
+    navigate('/job-seeker-applied-jobs')
+  }
+
+  const savedJobs = () => {
+    setShowSidebar(false)
+    navigate('/job-seeker-saved-jobs')
+  }
+
+  document.querySelector('Link').addEventListener('click', () => {
     setNavOpen(false)
   })
 
@@ -65,7 +81,7 @@ const Navbar = () => {
     <>
       <div className='container-fluid navbar shadow position-fixed'>
         <div className='navbar-container'>
-          <h4 className='text-primary fs-2'>JobMatch</h4>
+          <h4 className='text-primary fs-2' onClick={() => navigate('/page/jobpage')}>JobMatch</h4>
 
           <button
             className="navbar-toggler"
@@ -83,24 +99,40 @@ const Navbar = () => {
               <li><Link to="/page/services" onClick={closeNavBar}>Services</Link></li>
             </ul>
 
-            <div className='d-flex align-items-center me-4 gap-3'>
+            <div className='nav-options d-flex gap-3'>
               {
-                !user && <Link to="/page/login" onClick={closeNavBar} className='btn btn-outline-primary fs-4 rounded-pill px-4'>Login</Link>
+                !user && <Link to="/page/login" onClick={closeNavBar} className='navbar-login'>
+                  Login
+                  <svg class="snake-border" viewBox="0 0 200 60" preserveAspectRatio="none">
+
+                    <rect class="solid-border" x="2" y="2" width="196" height="56" rx="12" ry="12" />
+
+                    <rect class="snake-line" x="2" y="2" width="196" height="56" rx="13" ry="13" />
+                  </svg>
+                </Link>
               }
 
               {
-                !user && (
+                (!user || !user.role === "USER") && (
                   <div className="employee-dropdown text-decoration-none text-muted">
                     For employees <i className='fa fa-caret-down'></i>
 
                     <div className='employee-buttons'>
                       <ul>
-                        <li>
-                          <Link to={'/page/jobpostform'} onClick={closeNavBar} className='employee-btn'>Post a job</Link>
-                        </li>
-                        <li>
-                          <Link className='employee-btn' onClick={closeNavBar}>Employer login</Link>
-                        </li>
+                        {
+                          user && (
+                            <li>
+                              <Link to={'/page/jobpostform'} onClick={closeNavBar} className='employee-btn'>Post a job</Link>
+                            </li>
+                          )
+                        }
+                        {
+                          !user && (
+                            <li>
+                              <Link to={'/page/recruiterform'} className='employee-btn' onClick={closeNavBar}>Employer Registration</Link>
+                            </li>
+                          )
+                        }
                       </ul>
                     </div>
                   </div>
@@ -140,10 +172,32 @@ const Navbar = () => {
             </button>
 
             <ul className='list-group text-start'>
-              <li className='list-group-item border-0 ps-0'>
+              <li className='list-group-item border-0 ps-0' onClick={() => {
+                navigate('/profile-performance');
+                setShowSidebar(false);
+                setNavOpen(false)
+              }}>
                 <i className='fa fa-bar-chart me-2'></i> Profile Performance
               </li>
-              <li className='list-group-item border-0 ps-0'>
+              {
+                (user && user.role === 'USER') &&
+                <>
+                  <li className='list-group-item border-0 ps-0' onClick={appliedJobs}>
+                    <i className='fa fa-bar-briefcase me-2'></i> Applied Jobs
+                  </li>
+
+                  <li className='list-group-item border-0 ps-0' onClick={savedJobs}>
+                    <i className='fa fa-bar-briefcase me-2'></i> SavedJobs Jobs
+                  </li>
+                </>
+              }
+              <li className='list-group-item border-0 ps-0'
+                onClick={() => {
+                  setShowSidebar(false);
+                  setNavOpen(false);
+                  navigate('/setting-page')
+                }}
+              >
                 <i className='fa fa-cog me-2'></i> Settings
               </li>
               <li className='list-group-item border-0 ps-0 text-danger' onClick={closePage} style={{ cursor: 'pointer' }}>

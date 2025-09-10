@@ -7,6 +7,8 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [token, setToken] = useState(null)
     const [user, setUser] = useState(null);
+    const [skills, setSkills] = useState([]);
+    const [loading,setLoading]=useState(true)
 
     const navigate = useNavigate()
 
@@ -16,6 +18,12 @@ export const UserProvider = ({ children }) => {
 
         localStorage.setItem('token', data.token)
         localStorage.setItem('user', JSON.stringify(data.user))
+
+        const res = Services.getAllSkills();
+        // console.log(res.data)
+        if (res.status === 200) {
+            setSkills(res.data)
+        }
     }
 
     const logout = () => {
@@ -29,26 +37,41 @@ export const UserProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        const storedToken = localStorage.getItem("token");
+        const fetchData = async () => {
+            const storedToken = localStorage.getItem("token");
 
-        if (storedToken) {
-            setToken(storedToken);
+            if (storedToken) {
+                setToken(storedToken);
 
-            Services.getUserProfile(storedToken).then((res) => {
-                setUser(res.data)
-                localStorage.setItem('user', JSON.stringify(res.data))
-            }).catch((err) => {
-                console.error("Failed to fetch user profile", err)
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                setUser(null);
-                setToken(null);
-            })
-        }
+                try {
+
+                    const userRes = await Services.getUserProfile(storedToken);
+                    setUser(userRes.data);
+                    localStorage.setItem('user', JSON.stringify(userRes.data));
+
+                    const skillsRes = await Services.getAllSkills();
+                    if (skillsRes.status === 200) {
+                        setSkills(skillsRes.data);
+                    }
+                } catch (err) {
+                    console.error("Failed to fetch user profile or skills", err);
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+                    setUser(null);
+                    setToken(null);
+                }
+            } else {
+                // navigate('/page/login');
+            }
+            setLoading(false)
+        };
+
+        fetchData();
     }, []);
 
+
     return (
-        <UserContext.Provider value={{ token, user, login, logout, setToken, setUser }}>
+        <UserContext.Provider value={{ token, user, login, logout, setToken, setUser, skills, loading }}>
             {children}
         </UserContext.Provider>
     )

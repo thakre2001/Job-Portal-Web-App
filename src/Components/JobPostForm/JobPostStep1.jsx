@@ -1,6 +1,6 @@
 import React from 'react'
 
-const JobPostStep1 = ({ formData, setFormData, nextStep ,handleChange}) => {
+const JobPostStep1 = ({ formData, setFormData, nextStep, handleChange }) => {
     return (
         <div className="container-fluid">
             <div className="card shadow-sm p-4">
@@ -10,48 +10,55 @@ const JobPostStep1 = ({ formData, setFormData, nextStep ,handleChange}) => {
 
                     <div className="col-md-6">
                         <label htmlFor="title" className="form-label">Job Title</label>
-                        <input 
-                        name='jobTitle'
-                        type="text" 
-                        className="form-control" 
-                        id="title" 
-                        placeholder="e.g. Frontend Developer" 
-                        onChange={handleChange}
-                        value={formData.jobTitle}
+                        <input
+                            name='jobTitle'
+                            type="text"
+                            className="form-control"
+                            id="title"
+                            placeholder="e.g. Frontend Developer"
+                            onChange={handleChange}
+                            value={formData.jobTitle}
                         />
                     </div>
 
                     <div className="col-12">
                         <label htmlFor="description" className="form-label">Job Description</label>
-                        <textarea 
-                        className="form-control" 
-                        id="description" 
-                        rows="4" 
-                        name='jobDescription'
-                        onChange={handleChange}
-                        value={formData.jobDescription}
-                        placeholder="Write a clear description of the role..."></textarea>
+                        <textarea
+                            className="form-control"
+                            id="description"
+                            rows="4"
+                            name='jobDescription'
+                            onChange={handleChange}
+                            value={formData.jobDescription}
+                            placeholder="Write a clear description of the role..."></textarea>
                     </div>
 
                     <div className="col-md-6">
                         <label htmlFor="location" className="form-label">Job Location</label>
-                        <input type="text" 
-                        className="form-control" 
-                        id="location" 
-                        name='jobLocations'
-                        onChange={handleChange}
-                        value={formData.jobLocations}
-                        placeholder="e.g. Pune, Mumbai" />
+                        <input type="text"
+                            className="form-control"
+                            id="location"
+                            name='jobLocations'
+                            onChange={(e) => {
+                                handleChange({
+                                    target: {
+                                        name: "jobLocations",
+                                        value: e.target.value.split(",").map(s => s.trim())
+                                    }
+                                })
+                            }}
+                            value={formData.jobLocations.join(', ')}
+                            placeholder="e.g. Pune, Mumbai" />
                     </div>
 
                     <div className="col-md-6">
                         <label htmlFor="employment" className="form-label">Employment Type</label>
-                        <select className="form-select" 
-                        name='employmentType' 
-                        onChange={handleChange} 
-                        id="employment" value={formData.employmentType}
+                        <select className="form-select"
+                            name='employmentType'
+                            onChange={handleChange}
+                            id="employment" value={formData.employmentType}
                         >
-                            <option value="">Select Type</option>
+                            <option value="" selected disabled>Select Type</option>
                             <option value="full-time">Full Time</option>
                             <option value="part-time">Part Time</option>
                             <option value="contract">Contract</option>
@@ -62,9 +69,9 @@ const JobPostStep1 = ({ formData, setFormData, nextStep ,handleChange}) => {
 
                     <div className="col-md-6">
                         <label htmlFor="category" className="form-label">Job Category</label>
-                        <select className="form-select" 
-                        name='jobCategory' 
-                        value={formData.jobCategory} onChange={handleChange} id="category"
+                        <select className="form-select"
+                            name='jobCategory'
+                            value={formData.jobCategory} onChange={handleChange} id="category"
                         >
                             <option value="">Select Category</option>
                             <option value="sales">Sales</option>
@@ -78,19 +85,19 @@ const JobPostStep1 = ({ formData, setFormData, nextStep ,handleChange}) => {
                     <div className="col-md-6">
                         <label htmlFor="role" className="form-label">Job Role</label>
                         <input type="text"
-                         className="form-control"
-                         name='jobRole'
-                         onChange={handleChange}
-                         value={formData.jobRole}
-                          id="role" placeholder="e.g. UI Developer" />
+                            className="form-control"
+                            name='jobRole'
+                            onChange={handleChange}
+                            value={formData.jobRole}
+                            id="role" placeholder="e.g. UI Developer" />
                     </div>
 
                     <div className="col-md-6">
                         <label htmlFor="industry" className="form-label">Industry Type</label>
                         <select className="form-select" id="industry"
-                        value={formData.industryType}
-                        name='industryType'
-                        onChange={handleChange}
+                            value={formData.industryType}
+                            name='industryType'
+                            onChange={handleChange}
                         >
                             <option value="">Select Industry</option>
                             <option value="it">IT Services</option>
@@ -101,9 +108,9 @@ const JobPostStep1 = ({ formData, setFormData, nextStep ,handleChange}) => {
                     <div className="col-md-6">
                         <label htmlFor="workmode" className="form-label">Work Mode</label>
                         <select className="form-select" id="workmode"
-                        name='workMode'
-                        value={formData.workMode}
-                        onChange={handleChange}
+                            name='workMode'
+                            value={formData.workMode}
+                            onChange={handleChange}
                         >
                             <option value="">Select Mode</option>
                             <option value="onsite">On-site</option>
@@ -114,22 +121,22 @@ const JobPostStep1 = ({ formData, setFormData, nextStep ,handleChange}) => {
 
                     <div className="col-md-6">
                         <label htmlFor="openings" className="form-label">Number of Openings</label>
-                        <input type="number" 
-                        className="form-control" 
-                        id="openings"
-                        name='noOfOpenings'
-                        value={formData.noOfOpenings}
-                        onChange={handleChange}
-                         min="1" placeholder="e.g. 5" 
-                         />
+                        <input type="number"
+                            className="form-control"
+                            id="openings"
+                            name='noOfOpenings'
+                            value={formData.noOfOpenings}
+                            onChange={handleChange}
+                            min="1" placeholder="e.g. 5"
+                        />
                     </div>
 
                     <div className="col-md-6">
                         <label htmlFor="shift" className="form-label">Shift Type</label>
                         <select className="form-select" id="shift"
-                        name='shiftTime'
-                        value={formData.shiftTime}
-                        onChange={handleChange}
+                            name='shiftTime'
+                            value={formData.shiftTime}
+                            onChange={handleChange}
                         >
                             <option value="">Select Shift</option>
                             <option value="day">Day</option>
@@ -140,21 +147,21 @@ const JobPostStep1 = ({ formData, setFormData, nextStep ,handleChange}) => {
 
                     <div className="col-md-6">
                         <label htmlFor="joiningDate" className="form-label">Joining Date</label>
-                        <input type="date" 
-                        className="form-control" 
-                        name='joiningDate'
-                        value={formData.joiningDate}
-                        onChange={handleChange}
-                        id="joiningDate" 
+                        <input type="date"
+                            className="form-control"
+                            name='joiningDate'
+                            value={formData.joiningDate}
+                            onChange={handleChange}
+                            id="joiningDate"
                         />
                     </div>
 
                     <div className="col-md-6">
                         <label htmlFor="deadline" className="form-label">Application Deadline</label>
-                        <input type="date" className="form-control" id="deadline" 
-                        name='applicationDeadline'
-                        value={formData.applicationDeadline}
-                        onChange={handleChange}
+                        <input type="date" className="form-control" id="deadline"
+                            name='applicationDeadline'
+                            value={formData.applicationDeadline}
+                            onChange={handleChange}
                         />
                     </div>
                 </form>

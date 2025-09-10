@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'poppins', sans-serif;
+    
 }
 
 .AuthContainer {
@@ -19,8 +19,8 @@
 
 .form-container {
     position: relative;
-    width: 750px;
-    height: 500px;
+    width: 900px;
+    height: 580px;
     background-color: #fff;
     border-radius: 30px;
     overflow: hidden;

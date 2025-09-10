@@ -6,53 +6,54 @@ import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
 
-    const {login}=useContext(UserContext);
+    const { login } = useContext(UserContext);
 
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
-    const [formData,setFormData]=useState({
-        name:null,
-        email:null,
-        mobile:null,
-        password:null,
-        workStatus:null
+    const [formData, setFormData] = useState({
+        name: null,
+        email: null,
+        mobile: null,
+        password: null,
+        workStatus: null,
+        confirmPassword: null,
     })
-    const [errors,setErrors]=useState({})
-    const [selectedStatus,setSelectedStatus]=useState('')
+    const [errors, setErrors] = useState({})
+    const [showPass, setShowPass] = useState(false)
+    const [showConfirmPass, setShowConfirmPass] = useState(false)
 
-    const [showPass,setShowPass]=useState(false)
-
-    const handleChange=(e)=>{
-        const {name,value}=e.target;
+    const handleChange = (e) => {
+        const { name, value } = e.target;
         setFormData({
-            ...formData,[name]:value
+            ...formData, [name]: value
         })
         setErrors({
-            ...errors,[name]:undefined
+            ...errors, [name]: undefined
         })
     }
 
-    const selectWorkStatus=(status)=>{
-        setSelectedStatus(status)        
-        setFormData({...formData,workStatus:status})
-    }
-
-    const formValidations=YUP.object({
-        name:YUP.string().required("Name is required"),
-        email:YUP.string().email("Invalid email").required("Email is required"),
-        mobile:YUP.string().matches(/^\d{10}$/, "Phone number must contain 10 digits")
-        .required("Phone number is required"),
-        password:YUP.string().required("Password is required"),
-        workStatus:YUP.string().required("Choose any one")
+    const formValidations = YUP.object({
+        name: YUP.string().required("Name is required"),
+        email: YUP.string().email("Invalid email").required("Email is required"),
+        mobile: YUP.string().matches(/^\d{10}$/, "Phone number must contain 10 digits")
+            .required("Phone number is required"),
+        password: YUP.string().required("Password is required"),
+        confirmPassword: YUP.string()
+            .oneOf([YUP.ref("password"), null], "Passwords must match")
+            .required("Confirm password is required"),
+        workStatus: YUP.string().required("Choose any one")
     })
 
-    const handleSubmit=async(e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            await formValidations.validate(formData,{abortEarly:false})
-            const response=await Services.addUser(formData);
-           
-            if(response.status!==200){
+            await formValidations.validate(formData, { abortEarly: false })
+            
+            const { confirmPassword, ...sendData } = formData  
+
+            const response = await Services.addUser(sendData);
+
+            if (response.status !== 200) {
                 alert("Something Went wrong try again")
             }
 
@@ -60,19 +61,19 @@ const Register = () => {
             navigate('/page/jobpage')
 
             setFormData({
-                name:'',
-                email:'',
-                mobile:'',
-                workStatus:'',
-                password:'',
+                name: '',
+                email: '',
+                mobile: '',
+                workStatus: '',
+                password: '',
+                confirmPassword: ''
             })
-            
+
         } catch (error) {
-            alert('Server problem')
-            if(error?.inner){
-                const newError={}
-                error.inner.forEach((err)=>{
-                    newError[err.path]=err.message
+            if (error?.inner) {
+                const newError = {}
+                error.inner.forEach((err) => {
+                    newError[err.path] = err.message
                 })
                 setErrors(newError)
             }
@@ -82,87 +83,82 @@ const Register = () => {
     return (
         <>
             <div className='register'>
-                {/* <div className='left-side-structure'>
-                    <div className="left-inner-structure"></div>
-                </div>
-                <div className='left-side-structure2'>
-                    <div className="left-inner-structure"></div>
-                </div> */}
-                {/* <div className="register-form"> */}
-                    {/* <div className='d-flex justify-content-between'>
-                        <div>
-                            <h2>Create your job profile here</h2>
-                            <h4 className='text-secondary'>Search & apply to top jobs</h4>
-                        </div>
-                        <h2>Already Registered? <a href={'/page/login'}>Login</a> here</h2>
-                    </div> */}
-                    <p className='heading'>Create your job profile here</p>
-                    <form action="">
-                        <div className='input-field mt-md-5'>
-                            <input 
-                            type="text" 
-                            name="name" 
-                            id="" 
+                <p className='heading'>Create your job profile here</p>
+                <form action="">
+                    <div className='input-field mt-md-5'>
+                        <input
+                            type="text"
+                            name="name"
                             onChange={handleChange}
-                            placeholder='Full name' 
-                            />
-                            <i className='fa fa-user'></i>
-                        </div>
+                            placeholder='Full Name'
+                            className={`${errors.name ? 'has-tooltip' : ''}`}
+                        />
+                        <i className='fa fa-user'></i>
                         {errors.name && <div className='error-message'>{errors.name}</div>}
-                        <div className='input-field mt-3'>
-                            <input 
-                            type="email" 
-                            name="email" 
-                            id=""
-                            onChange={handleChange} 
-                            placeholder='Email ID' 
-                            />
-                            <i className='fa fa-envelope'></i>
-                            {errors.email && <div className='error-message'>{errors.email}</div>}
-                        </div>
-                        
-                        <div className='input-field mt-3'>
-                            <input 
-                            type={`${showPass?'text':"password" }`}
-                            name="password" 
-                            id="" 
+                    </div>
+
+                    <div className='input-field mt-3'>
+                        <input
+                            type="email"
+                            name="email"
                             onChange={handleChange}
-                            placeholder='Password' 
-                            />
-                            <i className='fa fa-lock' style={{cursor:'pointer'}} onClick={()=>setShowPass(!showPass)}></i>
-                        </div>
+                            placeholder='Email ID'
+                            className={`${errors.email ? 'has-tooltip' : ''}`}
+                        />
+                        <i className='fa fa-envelope'></i>
+                        {errors.email && <div className='error-message'>{errors.email}</div>}
+                    </div>
+
+                    <div className='input-field mt-3'>
+                        <input
+                            type={`${showPass ? 'text' : "password"}`}
+                            name="password"
+                            onChange={handleChange}
+                            placeholder='Password'
+                            className={`${errors.password ? 'has-tooltip' : ''}`}
+                        />
+                        <i className='fa fa-lock' style={{ cursor: 'pointer' }} onClick={() => setShowPass(!showPass)}></i>
                         {errors.password && <div className='error-message'>{errors.password}</div>}
-                        <div className='input-field mt-3'>
-                            <input 
-                            type="text" 
-                            name="mobile" 
-                            id="" 
+                    </div>
+
+                    <div className='input-field mt-3'>
+                        <input
+                            type={`${showConfirmPass ? 'text' : "password"}`}
+                            name="confirmPassword"
                             onChange={handleChange}
-                            placeholder='Mobile number' 
-                            />
-                            <i className='fa fa-phone'></i>
-                        </div>
+                            placeholder='Confirm Password'
+                            className={`${errors.confirmPassword ? 'has-tooltip' : ''}`}
+                        />
+                        <i className='fa fa-lock' style={{ cursor: 'pointer' }} onClick={() => setShowConfirmPass(!showConfirmPass)}></i>
+                        {errors.confirmPassword && <div className='error-message'>{errors.confirmPassword}</div>}
+                    </div>
+
+                    <div className='input-field mt-3'>
+                        <input
+                            type="text"
+                            name="mobile"
+                            onChange={handleChange}
+                            placeholder='Mobile number'
+                            className={`${errors.mobile ? 'has-tooltip' : ''}`}
+                        />
+                        <i className='fa fa-phone'></i>
                         {errors.mobile && <div className='error-message'>{errors.mobile}</div>}
-                        <div className='mt-3 row d-flex justify-content-center'>
-                            <p>Work Status<span>*</span></p>
-                            <div className="col-md-5 col-6" onClick={()=>{selectWorkStatus("Experienced")}}>
-                                <div className={`card p-3 ${selectedStatus==="Experienced" ? 'bg-success': 'bg-secondary'}`}>
-                                    <h4>I'm Experienced</h4>
-                                </div>
-                            </div>
-                            <div className="col-md-5 col-6" onClick={()=>{selectWorkStatus("Fresher")}}>
-                                <div className={`card p-3 ${selectedStatus === "Fresher" ? 'bg-success': 'bg-secondary'}`}>
-                                    <h4>I'm a Fresher</h4>
-                                </div>
-                            </div>
-                        </div>
-                        {errors.workStatus && <div className='text-danger'>{errors.workStatus}</div>}
-                        <div className='mt-3'>
-                            <button className='register-btn' onClick={handleSubmit}>Register now</button>
-                        </div>
-                    </form>
-                </div>
-            {/* </div> */}
+                    </div>
+
+                    <div className='input-field mt-3 '>
+                        <select name="workStatus" onChange={handleChange} className={`${errors.workStatus ? 'has-tooltip' : ''}`}>
+                            <option value="" disabled selected >Select work status</option>
+                            <option value="Fresher">I'm a Fresher</option>
+                            <option value="Experienced">I'm Experienced</option>
+                        </select>
+                        {errors.workStatus && <div className='error-message'>{errors.workStatus}</div>}
+                    </div>
+
+                    <div className='mt-3'>
+                        <button className='register-btn' onClick={handleSubmit}>Register now</button>
+                    </div>
+                </form>
+            </div>
         </>
     )
 }

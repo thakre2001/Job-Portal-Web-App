@@ -7,11 +7,11 @@ import './AuthContainer.css'
 
 const AuthContainer = () => {
 
-    const [isActive,setIsActive]=useState(false)
+    const [isActive, setIsActive] = useState(false)
 
     return (
         <div className='AuthContainer'>
-            <div className={`form-container ${isActive?'active':''}`}>
+            <div className={`form-container ${isActive ? 'active' : ''}`}>
                 {/* <div className='left-section col-5'>
                     <div>
                         
@@ -24,22 +24,33 @@ const AuthContainer = () => {
                 </div>
                 <div className="toggle-box">
                     <div className="toggle-panel toggle-left">
-                        <h2 className='fw-bolder fs-2 mb-4'>Join JobMatch Today!</h2>
+                        <h2 className="fw-bolder fs-3 mb-4">Join JobMatch Today!</h2>
                         <p>Discover thousands of career opportunities.</p>
                         <p>Trusted by top recruiters.</p>
-                        <h4>Easy sign-up and application process.</h4>
-                        <button onClick={()=>{setIsActive(true)}} className='register-btn'>
+                        <h5>Easy sign-up and application process.</h5>
+                        <button onClick={() => { setIsActive(true) }} className="register-btn">
                             Create Your Account
                         </button>
                         <img src={loginImg} alt="Job search illustration" />
                     </div>
 
                     <div className="toggle-panel toggle-right">
-                        <p>Welcome To JobMatch</p>
+                        <h2 className="fw-bolder fs-3 mb-3">Welcome Back!</h2>
+                        <p className="mb-2">Log in to continue your job search journey.</p>
+                        <p className="mb-2">Access saved jobs and applications instantly.</p>
+                        <h5 className="mb-4">Stay connected with top recruiters.</h5>
+
                         <p>Already Registered?</p>
-                        <button onClick={()=>{setIsActive(false)}} className='login-btn'>Login</button>
+                        <button onClick={() => { setIsActive(false) }} className="login-btn">
+                            Login
+                        </button>
+
+                        <small className="text-muted d-block mt-3">
+                            Trouble logging in? <a href="#">Reset your password</a>
+                        </small>
                     </div>
                 </div>
+
             </div>
         </div >
     )

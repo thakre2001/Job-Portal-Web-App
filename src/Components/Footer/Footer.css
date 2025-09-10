@@ -1,0 +1,56 @@
+.footer {
+  background: linear-gradient(145deg, #1c1c1c, #2a2a2a);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.6);
+  transform-style: preserve-3d;
+  color: #fff;
+  perspective: 1000px;
+  animation: slideUp 1s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100px) rotateX(30deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+/* Footer links hover */
+.footer a {
+  transition: all 0.3s ease;
+}
+
+.footer a:hover {
+  color: #0dcaf0;
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Social icons hover effect */
+.footer .fab {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.footer .fab:hover {
+  color: #0dcaf0;
+  transform: rotateY(20deg) scale(1.2);
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .footer .col-12,
+  .footer .col-6 {
+    text-align: center !important;
+  }
+
+  .footer .d-flex.justify-content-center {
+    flex-wrap: wrap;
+  }
+
+  .footer .d-flex.gap-3 {
+    justify-content: center !important;
+  }
+}

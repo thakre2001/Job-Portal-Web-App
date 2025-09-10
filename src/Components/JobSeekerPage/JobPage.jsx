@@ -1,195 +1,430 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from "react";
+import { Services } from "../../BackendAPIs/Services";
+import { UserContext } from "../UserContext";
+import { Button, Modal, Badge } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import "./JobPage.css";
 
 const JobPage = () => {
+    const { user, token } = useContext(UserContext);
+    const navigate = useNavigate();
+    const [jobs, setJobs] = useState([]);
+    const [showDetails, setShowDetails] = useState(false);
+    const [selectedJob, setSelectedJob] = useState(null);
+    const [filteredJobs, setFilteredJobs] = useState([]);
 
-    // const [jobExperience, setJobExperience] = useState("Select expereince")
+    const [searchJob, setSearchJob] = useState("");
+    const [employementFilter, setEmployementFilter] = useState("")
+    const [experienceFilter, setExperienceFilter] = useState("")
 
-    const [jobs] = useState([
-        {
-            id: 1,
-            title: 'React Developer',
-            company: 'TechNova',
-            location: 'Remote',
-            salary: '$80k/year',
-            description: 'Work on front-end development with React and Redux.',
-        },
-        {
-            id: 2,
-            title: 'Java Backend Developer',
-            company: 'CodeCrafters',
-            location: 'Bangalore',
-            salary: '₹12 LPA',
-            description: 'Develop REST APIs using Spring Boot and Microservices.',
-        },
-    ])
+    const [jobSaved, setJobSaved] = useState([])
+
+    useEffect(() => {
+        const fetchJobs = async () => {
+            try {
+                let res
+                if (!user) {
+                    res = await Services.getAllJobs();
+                } else {
+                    res = await Services.getAllJobForUser(token)
+                }
+                // console.log(res.data);
+
+                if (res.status === 200) {
+                    setJobs(res.data);
+                    setFilteredJobs(res.data);
+                }
+            } catch (error) {
+                console.error("Error fetching jobs", error);
+            }
+        };
+        fetchJobs();
+    }, [user, token]);
+
+    const onSearchChange = (e) => {
+        const value = e.target.value;
+        setSearchJob(value)
+
+        if (!value.trim()) {
+            setFilteredJobs(jobs)
+        }
+    }
+
+    const applyFilters = () => {
+        let filtered = jobs;
+        if (searchJob.trim()) {
+            const terms = searchJob.toLowerCase().split(" ").filter(Boolean)
+            filtered = filtered.filter((job) => {
+                const jobTitle = job.jobTitle?.toLowerCase() || "";
+                const company = job.companyName && job.companyName?.toLowerCase() || "";
+                const location = job.companyAddress && job.companyAddress?.city.toLowerCase() || "";
+                const employmentType = job.employmentType && job.employmentType.toLowerCase() || "";
+
+                return terms.every(term =>
+                    jobTitle.includes(term) ||
+                    company.includes(term) ||
+                    location.includes(term) ||
+                    employmentType.includes(term)
+                )
+            }
+            )
+
+        }
+
+        if (experienceFilter) {
+
+            if (experienceFilter === "0-1") {
+                filtered = filtered.filter((job) => job.experienceMin >= 0 && job.experienceMax <= 1)
+            } else if (experienceFilter === "1-3") {
+                filtered = filtered.filter((job) => job.experienceMin >= 1 && job.experienceMax <= 3)
+            } else if (experienceFilter === "3-5") {
+                filtered = filtered.filter((job) => job.experienceMin >= 3 && job.experienceMax <= 5)
+            } else if (experienceFilter === "5-10") {
+                filtered = filtered.filter((job) => job.experienceMin >= 5 && job.experienceMax <= 10)
+            } else if (experienceFilter === "10+") {
+                filtered = filtered.filter((job) => job.experienceMin >= 10 && job.experienceMax >= 10)
+            }
+
+        }
+
+        if (employementFilter) {
+            filtered = filtered.filter((job) =>
+                job.employmentType &&
+                job.employmentType.toLowerCase().includes(employementFilter.toLowerCase()))
+        }
+
+        setFilteredJobs(filtered)
+    };
+
+    useEffect(() => {
+
+        const fetchSavedJobByUser = async () => {
+            try {
+                const res = await Services.fetchSavedJobByUser(token);
+                console.log("saved jobs", res);
+
+                if (res.status === 200) {
+                    setJobSaved(res.data)
+                }
+            } catch (error) {
+
+            }
+        }
+
+        fetchSavedJobByUser()
+
+    }, [token])
+
+    useEffect(() => {
+        // console.log("employement Type filter", employementFilter);
+
+        applyFilters()
+    }, [employementFilter, experienceFilter, searchJob])
+
+    const handleEmployementTypeSearch = (value) => {
+        setEmployementFilter(value)
+    }
+
+    const handleExperienceSearch = (value) => {
+        setExperienceFilter(value)
+        applyFilters()
+
+    }
+
+    const openApplyPage = (jobId) => {
+        if (user) {
+            window.open(`/apply/${jobId}`, "_blank")
+        } else {
+            navigate('/page/login')
+        }
+    }
+
+    const handleSaveJob = async (jobId) => {
+        console.log("token", token);
+
+        if (token) {
+
+            setJobSaved(prev => [...prev, { jobId }])
+            try {
+                const res = await Services.saveJobToUser(jobId, token)
+                // console.log(res);
+                if (res.status === 200) {
+                    if (res.data && Array.isArray(res.data)) {
+                        setJobSaved(res.data)
+                    }
+                } else {
+                    setJobSaved(prev => prev.filter(job => job.jobId !== jobId))
+                }
+            } catch (error) {
+
+            }
+        } else {
+            navigate('/page/login')
+        }
+    }
+
+    const handleRemoveJob = async (jobId) => {
+        if (token) {
+            setJobSaved(prev => prev.filter(job => job.jobId !== jobId))
+
+            try {
+                const res = await Services.deleteSavedJobFromUser(jobId, token);
+                if (res.status === 200) {
+                    setJobSaved(...prev => prev.filter(job => jobId !== jobId))
+                } else {
+                    setJobSaved(prev => [...prev, { jobId }])
+                }
+            } catch (error) {
+
+            }
+        }
+    }
+
     return (
-        <>
+        <div className="jobpage-wrapper bg-light">
+            {/* Hero Section */}
+            <section className="hero-banner text-center py-5 bg-primary text-white">
+                <h1 className="fw-bold">Find Your Dream Job</h1>
+                <p className="mb-4">Search from thousands of opportunities</p>
 
-            {/* <div className='jobpage bg-light' style={{ paddingTop: 150 }}>
-                <section className='container-fluid banner-section'>
-                    <h1>Find your dream job</h1>
+                <div className="search-bar d-flex justify-content-center gap-2">
+                    <input
+                        type="text"
+                        value={searchJob}
+                        onChange={onSearchChange}
+                        placeholder="Search by job title, company, or location"
+                        className="form-control w-25"
+                    />
+                    <select className="form-select"
+                        style={{ width: '15%' }}
+                        onChange={(e) => handleEmployementTypeSearch(e.target.value)}
+                        value={employementFilter}
+                    >
+                        <option value="">Select job</option>
+                        <option value="full-time">Full time</option>
+                        <option value="part-time">Part time</option>
+                        <option value="internship">Internship</option>
+                        <option value="contract">Contract</option>
+                        <option value="freelance">Freelance</option>
+                    </select>
+                    <select className="form-select"
+                        style={{ width: '15%' }}
+                        onChange={(e) => handleExperienceSearch(e.target.value)}
+                        value={experienceFilter}
+                    >
+                        <option value="">Select experience</option>
+                        <option value="0-1">0-1 years</option>
+                        <option value="1-3">1-3 years</option>
+                        <option value="3-5">3-5 years</option>
+                        <option value="5-10">5-10 years</option>
+                        <option value="10+">10+ years</option>
 
-                    <div className="search-bar">
-                        <i className='fa fa-search me-3'></i>
-                        <input
-                            type="text"
-                            name="skill"
-                            id=""
-                            placeholder='Enter skills / designations / companies'
-                        />
-                        <span> | </span>
-                        <select name="experience" value={jobExperience} id="" className='p-0 m-0 w-25'>
-                            <option selected disabled>Select experience</option>
-                            <option value="Fresher">Fresher <span>(less than 1 year)</span></option>
-                            <option value="1">1 year</option>
-                            <option value="2">2 year</option>
-                            <option value="3">3 year</option>
-                            <option value="4">4 year</option>
-                            <option value="5">5 year</option>
-                        </select>
-                        <span> | </span>
-                        <input
-                            type="text"
-                            name="location"
-                            id=""
-                            placeholder='Enter location'
-                            className='w-25 me-0'
-                        />
-                        <button className='bg-primary ms-0 rounded-pill px-5 py-3'>Search</button>
-                    </div>
-                </section>
+                    </select>
+                    <Button variant="warning" onClick={applyFilters}>
+                        <i className="fa fa-search me-2"></i> Search
+                    </Button>
 
-                <section>
-                    <div className="row mt-3">
-                        <div className="col-md-8">
-                            <div className="card my-3 mx-3 p-5">
-                                <div className="card-body">
-                                    <div>
-                                        <h3>Title</h3>
-                                        <h5>Description, Rating</h5>
-                                    </div>
-                                    <p>location</p>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-8">
-                            <div className="card my-3 mx-3 p-5">
-                                <div className="card-body">
-                                    <div>
-                                        <h3>Title</h3>
-                                        <h5>Description, Rating</h5>
-                                    </div>
-                                    <p>location</p>
-                                    <p>Description</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-8">
-                            <div className="card my-3 mx-3 p-5">
-                                <div className="card-body">
-                                    <div>
-                                        <h3>Title</h3>
-                                        <h5>Description, Rating</h5>
-                                    </div>
-                                    <p>location</p>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-8">
-                            <div className="card my-3 mx-3 p-5">
-                                <div className="card-body">
-                                    <div>
-                                        <h3>Title</h3>
-                                        <h5>Description, Rating</h5>
-                                    </div>
-                                    <p>location</p>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div> */}
-            {/* <div className="p-6 max-w-5xl mx-auto">
-                <h2 className="text-3xl font-bold mb-6">Job Seeker Panel</h2>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                    <div className="bg-white p-6 rounded-lg shadow">
-                        <h3 className="text-xl font-semibold mb-4">Recommended Jobs</h3>
-                        <ul className="space-y-4">
-                            <li className="p-4 border rounded hover:bg-gray-50 cursor-pointer">
-                                <p className="font-medium">React Developer</p>
-                                <span className="text-sm text-gray-500">Remote | $70k/year</span>
-                            </li>
-                            <li className="p-4 border rounded hover:bg-gray-50 cursor-pointer">
-                                <p className="font-medium">Spring Boot Developer</p>
-                                <span className="text-sm text-gray-500">Bangalore | ₹8 LPA</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-white p-6 rounded-lg shadow">
-                        <h3 className="text-xl font-semibold mb-4">Your Applications</h3>
-                        <ul className="space-y-3">
-                            <li className="flex justify-between items-center border p-3 rounded">
-                                <div>
-                                    <p className="font-medium">Java Developer</p>
-                                    <span className="text-sm text-yellow-600">Status: Interview Scheduled</span>
-                                </div>
-                                <button className="text-blue-600 font-medium">View</button>
-                            </li>
-                            <li className="flex justify-between items-center border p-3 rounded">
-                                <div>
-                                    <p className="font-medium">Frontend Developer</p>
-                                    <span className="text-sm text-gray-600">Status: Pending</span>
-                                </div>
-                                <button className="text-blue-600 font-medium">View</button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div> */}
-
-            <div className="container jobpage-container" style={{ paddingTop: 100 }}>
-                <h2 className='text-center mb-4'>Explore Jobs</h2>
-
-                <div className="row">
                     {
-                        jobs.map((job) => (
-                            <div className="col-md-6 mb-4" key={job.id}>
-                                <div className="card h-100 shadow-sw p-4">
-                                    <div className='d-flex justify-content-between'>
-                                        <div>
-                                            <h5 className='mb-1'>{job?.title}</h5>
-                                            <p className='text-muted'>{job?.company}</p>
-                                            <p className='text-secondary'>{job?.location}</p>
-                                            <p className='text-success fw-semibold'>{job?.salary}</p>
-                                            <p className='small text-muted'>{job?.description.slice(0, 100)}...</p>
-                                            <p></p>
+                        (searchJob || employementFilter || experienceFilter) && (
+                            <Button variant="danger ms-2" onClick={() => {
+                                setFilteredJobs(jobs);
+                                setSearchJob("")
+                                setEmployementFilter("")
+                                setExperienceFilter("")
+                            }}>
+                                <i className="fa fa-x"></i>Remove all filters
+                            </Button>
+                        )
+                    }
+
+                </div>
+            </section>
+
+            {/* Jobs Grid */}
+            <section className="container py-5">
+                <h2 className="mb-4 text-center fw-semibold">Latest Job Openings</h2>
+                <div className="row g-4">
+                    {filteredJobs.length > 0 ? (
+                        filteredJobs
+                            .filter((job) => job.status === 'ACTIVE')
+                            .map((job) => (
+                                <div className="col-lg-4 col-md-6" key={job.jobId}>
+                                    <div className="job-card border rounded shadow-sm p-4 h-100 bg-white">
+                                        <div className="d-flex justify-content-between align-items-center mb-3">
+                                            <div className="w-100 d-flex justify-content-between align-items-center">
+                                                <h5 className="fw-bold">{job.jobTitle}</h5>
+                                                {
+                                                    !job.alreadyApplied && (
+                                                        <i
+                                                            className={`fa-${(jobSaved.some((saved) => saved.jobId === job.jobId) ? "solid" : "regular")} fa-bookmark text-primary fs-3`}
+                                                            onClick={() => {
+                                                                if (jobSaved.some((saved) => saved.jobId === job.jobId)) {
+                                                                    handleRemoveJob(job.jobId)
+                                                                } else {
+                                                                    handleSaveJob(job.jobId)
+                                                                }
+                                                            }}></i>
+                                                    )
+                                                }
+                                            </div>
+                                            {job.companyLogo && (
+                                                <img
+                                                    src={job.companyLogo}
+                                                    alt="Company Logo"
+                                                    style={{
+                                                        width: "50px",
+                                                        height: "50px",
+                                                        objectFit: "contain",
+                                                    }}
+                                                />
+                                            )}
+                                        </div>
+
+                                        <p className="mb-1 text-muted">{job.companyName}</p>
+                                        <p className="small text-secondary">
+                                            <i className="fa fa-map-marker-alt me-1"></i>
+                                            {job.companyAddress?.city}, {job.companyAddress?.state}
+                                        </p>
+
+                                        <div className="mt-2">
+                                            <Badge bg="info" className="me-2">
+                                                {job.employmentType || "N/A"}
+                                            </Badge>
+                                            <Badge bg="secondary">
+                                                {job.workMode || "Not specified"}
+                                            </Badge>
+                                        </div>
+
+                                        <div className="mt-3 fw-semibold text-success">
+                                            💰{" "}
+                                            {job.salaryMin && job.salaryMax
+                                                ? `${job.salaryMin} - ${job.salaryMax}`
+                                                : job.salaryNegotiable
+                                                    ? "Negotiable"
+                                                    : "Not disclosed"}
+                                        </div>
+
+                                        {/* <div className="mt-3 fw-semibold text-success">
+                                            {job.experienceMin && job.experienceMax
+                                                ? `${job.experienceMin} - ${job.experienceMax}`
+                                                : "Not disclosed"}
+                                        </div> */}
+
+                                        <div className="d-flex justify-content-between mt-4">
+                                            <Button
+                                                variant="outline-primary"
+                                                size="sm"
+                                                onClick={() => {
+                                                    setSelectedJob(job);
+                                                    setShowDetails(true);
+                                                }}
+                                            >
+                                                View Details
+                                            </Button>
+                                            {
+                                                job.alreadyApplied ? (
+                                                    <Button
+                                                        variant="secondary"
+                                                        size="sm"
+                                                        disabled
+                                                    >
+                                                        Already applied
+                                                    </Button>
+                                                ) : (
+                                                    <Button
+                                                        variant="success"
+                                                        size="sm"
+                                                        onClick={() => openApplyPage(job.jobId)}
+                                                    >
+                                                        Apply
+                                                    </Button>
+                                                )
+                                            }
                                         </div>
                                     </div>
-
-                                    <div className='mt-3 d-flex gap-2 justify-content-end'>
-                                        <button className='btn py-2 px-4 fs-5 btn-sm btn-outline-info'>
-                                            View Details
-                                        </button>
-                                        <button className='btn py-2 px-4 fs-5 btn-sm btn-primary'>
-                                            Apply
-                                        </button>
-                                        <button className='btn py-2 px-4 fs-5 btn-sm btn-outline-secondary'>
-                                            Share
-                                        </button>
-                                    </div>
                                 </div>
-                            </div>
-                        ))
-                    }
+                            ))
+                    ) : (
+                        <p className="text-center text-muted">No jobs found.</p>
+                    )}
                 </div>
-            </div>
-        </>
-    )
-}
+            </section >
 
-export default JobPage
+            {/* Job Details Modal */}
+            {
+                selectedJob && (
+                    <Modal
+                        show={showDetails}
+                        onHide={() => setShowDetails(false)}
+                        size="lg"
+                        centered
+                    >
+                        <Modal.Header closeButton>
+                            <Modal.Title>{selectedJob.jobTitle}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <h6>Company</h6>
+                            <p className="fw-semibold">{selectedJob.companyName}</p>
+                            <p className="text-muted">
+                                {selectedJob.companyAddress?.streetAddress},{" "}
+                                {selectedJob.companyAddress?.city},{" "}
+                                {selectedJob.companyAddress?.state},{" "}
+                                {selectedJob.companyAddress?.country}{" "}
+                                {selectedJob.companyAddress?.postalCode}
+                            </p>
+
+                            <h6>Description</h6>
+                            <p>{selectedJob.jobDescription}</p>
+
+                            <h6>Requirements</h6>
+                            <ul>
+                                <li>
+                                    Experience: {selectedJob.experienceMin || 0} -{" "}
+                                    {selectedJob.experienceMax || "N/A"} years
+                                </li>
+                                <li>
+                                    Education: {selectedJob.educationMin || "Not specified"}
+                                </li>
+                                <li>Skills: {selectedJob.skills?.join(", ") || "N/A"}</li>
+                                <li>
+                                    Languages: {selectedJob.languageKnown?.join(", ") || "N/A"}
+                                </li>
+                                <li>
+                                    Certifications:{" "}
+                                    {selectedJob.certificationRequired?.join(", ") || "N/A"}
+                                </li>
+                            </ul>
+
+                            <h6>Salary & Benefits</h6>
+                            <p>
+                                {selectedJob.salaryMin && selectedJob.salaryMax
+                                    ? `${selectedJob.salaryMin} - ${selectedJob.salaryMax}`
+                                    : "Negotiable"}
+                            </p>
+                            <p>Bonuses: {selectedJob.bonuses || "N/A"}</p>
+                            <p>Perks: {selectedJob.perks?.join(", ") || "N/A"}</p>
+
+                            <h6>Recruiter Contact</h6>
+                            <p>
+                                {selectedJob.recruiterName} ({selectedJob.recruiterEmail})
+                            </p>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={() => setShowDetails(false)}>
+                                Close
+                            </Button>
+                            <Button
+                                variant="success"
+                                onClick={() => openApplyPage(selectedJob.jobId)}
+                            >
+                                Apply Now
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                )
+            }
+        </div >
+    );
+};
+
+export default JobPage;

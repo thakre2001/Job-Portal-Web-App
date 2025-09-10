@@ -1,81 +1,136 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { Services } from '../../BackendAPIs/Services'
+import { UserContext } from '../UserContext'
+import { useNavigate } from 'react-router-dom';
 
-const JobPostStep5 = ({ formData, handleChange, nextStep, previousStep }) => {
+const JobPostStep5 = ({ formData, previousStep, setFormData }) => {
+
+    const { token } = useContext(UserContext);
+    const navigate=useNavigate()
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            console.log(formData);
+            console.log(token);
+            
+            
+            const res = await Services.addJob(formData, token)
+            if (res.status === 200) {
+                console.log(formData);
+                
+                setFormData({
+                    jobTitle: '',
+                    jobDescription: '',
+                    jobLocations: [],
+                    employmentType: '',
+                    jobCategory: '',
+                    jobRole: '',
+                    industryType: '',
+                    workMode: '',
+                    noOfOpenings: '',
+                    shiftTime: '',
+                    joiningDate: '',
+                    applicationDeadline: '',
+                    educationMin: '',
+                    prefferedQualification: [],
+                    experienceMin: '',
+                    experienceMax: '',
+                    skills: [],
+                    languageKnown: [],
+                    noticePeriod: '',
+                    certificationRequired: [],
+                    applicationMode: 'internal',
+                    applicationLink: '',
+                    requiredResumeUpload: true,
+                    requiredCoverLetter: false,
+                    salaryMin: '',
+                    salaryMax: '',
+                    salaryNegotiable: false,
+                    bonuses: '',
+                    perks: []
+                })
+                navigate('/page/jobpage')
+            }
+        } catch (error) {
+
+        }
+    }
     return (
         <div>
-            <div className="card p-4 shadow-sm">
-                <h2 className="mb-4 text-primary">Salary & Benefits</h2>
+            <h2 className="mb-4">Review & Publish</h2>
 
-                <form className="row g-3 fs-4 p-4">
-
-                    <div className="col-12 mb-3">
-                        <label className="form-label">Salary Range (₹)</label>
-
-                        <div className="row g-2 align-items-center">
-                            <div className="col-md-3">
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Min Salary"
-                                    min={0}
-                                    step={1000}
-                                    value={formData.salaryMin}
-                                    onChange={handleChange}
-                                />
-                            </div>
-
-                            <div className="col-md-3">
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Max Salary"
-                                    min={0}
-                                    step={1000}
-                                    value={formData.salaryMax}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div className="col-12">
-                        <label className="form-label d-block">Is Salary Negotiable?</label>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="radio" name="salaryNegotiable" id="negotiableYes" value="yes" />
-                            <label className="form-check-label" htmlFor="negotiableYes">Yes</label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="radio" name="salaryNegotiable" id="negotiableNo" value="no" />
-                            <label className="form-check-label" htmlFor="negotiableNo">No</label>
-                        </div>
-                    </div>
-
+            <div className="card p-4 shadow-sm rounded fs-5">
+                {/* STEP 1: Job Details */}
+                <h4 className="text-primary mb-3">Job Details</h4>
+                <div className="row">
                     <div className="col-md-6">
-                        <label htmlFor="bonus" className="form-label">Incentives / Bonus</label>
-                        <input type="text" className="form-control" id="bonus" placeholder="e.g., Performance bonus, stock options" />
+                        <p><strong>Job Title:</strong> {formData.jobTitle}</p>
+                        <p><strong>Job Description:</strong> {formData.jobDescription}</p>
+                        <p><strong>Employment Type:</strong> {formData.employmentType}</p>
+                        <p><strong>Job Category:</strong> {formData.jobCategory}</p>
+                        <p><strong>Job Role:</strong> {formData.jobRole}</p>
+                        <p><strong>Industry Type:</strong> {formData.industryType}</p>
                     </div>
-
                     <div className="col-md-6">
-                        <label htmlFor="perks" className="form-label">Perks & Benefits</label>
-                        <select className="form-select py-3" id="perks">
-                            <option value="">Select benefit</option>
-                            <option value="insurance">Health Insurance</option>
-                            <option value="flexible">Flexible Hours</option>
-                            <option value="hybrid">Hybrid Work</option>
-                            <option value="gym">Gym Membership</option>
-                            <option value="others">Others</option>
-                        </select>
+                        <p><strong>Work Mode:</strong> {formData.workMode}</p>
+                        <p><strong>Job Location(s):</strong> {formData.jobLocations}</p>
+                        <p><strong>Number of Openings:</strong> {formData.noOfOpenings}</p>
+                        <p><strong>Shift Type:</strong> {formData.shiftTime}</p>
+                        <p><strong>Joining Date:</strong> {formData.joiningDate}</p>
+                        <p><strong>Application Deadline:</strong> {formData.applicationDeadline}</p>
                     </div>
+                </div>
 
-                </form>
+                {/* STEP 2: Candidate Preferences */}
+                <h4 className="text-primary mt-4 mb-3">Candidate Preferences</h4>
+                <div className="row">
+                    <div className="col-md-6">
+                        <p><strong>Minimum Education:</strong> {formData.educationMin}</p>
+                        <p><strong>Preferred Qualifications:</strong> {formData.preferredQualification?.join(', ')}</p>
+                        <p><strong>Experience Required:</strong> {formData.experienceMin} – {formData.experienceMax} years</p>
+                        <p><strong>Skills Required:</strong> {formData.skills?.join(', ')}</p>
+                    </div>
+                    <div className="col-md-6">
+                        <p><strong>Languages Known:</strong> {formData.languageKnown?.join(', ')}</p>
+                        <p><strong>Notice Period:</strong> {formData.noticePeriod}</p>
+                        <p><strong>Certifications Required:</strong> {formData.certificationRequired}</p>
+                        <p><strong>Gender Preference:</strong> {formData.genderPreference}</p>
+                        <p><strong>Age Range:</strong> {formData.ageMin} – {formData.ageMax}</p>
+                    </div>
+                </div>
 
-                <div className="d-flex justify-content-between mt-4">
-                    <button className="btn btn-info px-5 py-2" onClick={previousStep}>Previous</button>
-                    <button className="btn btn-primary px-5 py-2" onClick={nextStep}>Next</button>
+                {/* STEP 4: Contact & Application Settings */}
+                <h4 className="text-primary mt-4 mb-3">Contact & Application Settings</h4>
+                <div className="row">
+                    <div className="col-md-6">
+                        <p><strong>Application Mode:</strong> {formData.applicationMode}</p>
+                        {formData.applicationMode === 'external' && (
+                            <p><strong>Application Link:</strong> {formData.applicationLink}</p>
+                        )}
+                        <p><strong>Resume Required:</strong> {formData.requiredResumeUpload ? 'Yes' : 'No'}</p>
+                        <p><strong>Cover Letter Required:</strong> {formData.requiredCoverLetter ? 'Yes' : 'No'}</p>
+                    </div>
+                </div>
+
+                {/* STEP 5: Salary & Benefits */}
+                <h4 className="text-primary mt-4 mb-3">Salary & Benefits</h4>
+                <div className="row">
+                    <div className="col-md-6">
+                        <p><strong>Salary Range:</strong> ₹{formData.salaryMin} – ₹{formData.salaryMax} per year</p>
+                        <p><strong>Salary Negotiable:</strong> {formData.salaryNegotiable ? 'Yes' : 'No'}</p>
+                    </div>
+                    <div className="col-md-6">
+                        <p><strong>Bonuses/Incentives:</strong> {formData.bonuses}</p>
+                        <p><strong>Perks & Benefits:</strong> {formData.perks}</p>
+                    </div>
                 </div>
             </div>
 
+            <div className='d-flex justify-content-between mt-4'>
+                <button className='btn btn-info py-2 px-5' onClick={previousStep}>Previous</button>
+                <button className='btn btn-lg btn-success' onClick={handleSubmit}>Submit Application</button>
+            </div>
         </div>
     )
 }

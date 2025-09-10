@@ -1,5 +1,7 @@
 * {
-  font-size: 1.1em;
+  font-size: 1rem;
+  /* font-family: 'poppins', sans-serif; */
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 body {
@@ -25,6 +27,7 @@ code {
   flex-direction: column;
   justify-content: center;
   font-size: 15px;
+  padding: 30px;
 }
 
 .register p{
@@ -34,7 +37,7 @@ code {
 .register .heading {
   font-weight: 600;
   font-size: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 .register .card {
@@ -47,10 +50,11 @@ code {
   padding: 5px 10px;
   border: 1px solid #ccc;
   border-radius: 25px;
-  font-size: 16px;
+  font-size: 20px;
   text-align: center;
   background: #7494ec;
   margin-top: 20px;
+  font-weight: 400;
 }
 
 @media screen and (max-width:600px){
@@ -150,7 +154,7 @@ code {
   border: 3px solid rgb(31, 173, 185);
   padding: 5px;
   border-radius: 50px;
-  font-size: 1.2em;
+  /* font-size: 1.2em; */
 }
 
 .jobpage .search-bar input,
