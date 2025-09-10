@@ -29,18 +29,18 @@ const Footer = () => {
               with top companies, and build your future.
             </p>
             <div className="d-flex justify-content-center justify-content-md-start gap-3 mt-3">
-              <a href="#" className="text-white">
+              {/* <a href="#" className="text-white"> */}
                 <i className="fab fa-facebook fa-lg"></i>
-              </a>
-              <a href="#" className="text-white">
+              {/* </a> */}
+              {/* <a href="#" className="text-white"> */}
                 <i className="fab fa-twitter fa-lg"></i>
-              </a>
-              <a href="#" className="text-white">
+              {/* </a> */}
+              {/* <a href="#" className="text-white"> */}
                 <i className="fab fa-linkedin fa-lg"></i>
-              </a>
-              <a href="#" className="text-white">
+              {/* </a> */}
+              {/* <a href="#" className="text-white"> */}
                 <i className="fab fa-instagram fa-lg"></i>
-              </a>
+              {/* </a> */}
             </div>
           </div>
 

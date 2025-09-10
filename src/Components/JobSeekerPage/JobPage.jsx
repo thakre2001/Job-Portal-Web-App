@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Services } from "../../BackendAPIs/Services";
 import { UserContext } from "../UserContext";
 import { Button, Modal, Badge } from "react-bootstrap";
@@ -50,15 +50,15 @@ const JobPage = () => {
         }
     }
 
-    const applyFilters = () => {
+    const applyFilters = useCallback(() => {
         let filtered = jobs;
         if (searchJob.trim()) {
             const terms = searchJob.toLowerCase().split(" ").filter(Boolean)
             filtered = filtered.filter((job) => {
                 const jobTitle = job.jobTitle?.toLowerCase() || "";
-                const company = job.companyName && job.companyName?.toLowerCase() || "";
-                const location = job.companyAddress && job.companyAddress?.city.toLowerCase() || "";
-                const employmentType = job.employmentType && job.employmentType.toLowerCase() || "";
+                const company = (job.companyName && job.companyName?.toLowerCase()) || "";
+                const location = (job.companyAddress && job.companyAddress?.city.toLowerCase()) || "";
+                const employmentType = (job.employmentType && job.employmentType.toLowerCase()) || "";
 
                 return terms.every(term =>
                     jobTitle.includes(term) ||
@@ -94,7 +94,13 @@ const JobPage = () => {
         }
 
         setFilteredJobs(filtered)
-    };
+    }, [employementFilter, experienceFilter, searchJob])
+
+    useEffect(() => {
+        // console.log("employement Type filter", employementFilter);
+
+        applyFilters()
+    }, [applyFilters])
 
     useEffect(() => {
 
@@ -114,12 +120,6 @@ const JobPage = () => {
         fetchSavedJobByUser()
 
     }, [token])
-
-    useEffect(() => {
-        // console.log("employement Type filter", employementFilter);
-
-        applyFilters()
-    }, [employementFilter, experienceFilter, searchJob])
 
     const handleEmployementTypeSearch = (value) => {
         setEmployementFilter(value)
@@ -170,7 +170,7 @@ const JobPage = () => {
             try {
                 const res = await Services.deleteSavedJobFromUser(jobId, token);
                 if (res.status === 200) {
-                    setJobSaved(...prev => prev.filter(job => jobId !== jobId))
+                    setJobSaved(...prev => prev.filter(job => job.jobId !== jobId))
                 } else {
                     setJobSaved(prev => [...prev, { jobId }])
                 }

@@ -16,8 +16,6 @@ const SavedJobs = () => {
         const fetchSavedJobs = async () => {
             try {
                 const res = await Services.fetchSavedJobByUser(token);
-                console.log("saved job page jobs", savedJobs);
-
                 if (res.status === 200) {
                     setSavedJobs(res.data);
                 }

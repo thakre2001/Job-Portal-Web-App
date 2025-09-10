@@ -29,7 +29,7 @@ const ProfilePerformance = () => {
         }
 
         fetchAppliedJobs()
-    }, [user])
+    }, [user,token])
 
     const jobStats = [
         { status: "Applied", count: applications.length },

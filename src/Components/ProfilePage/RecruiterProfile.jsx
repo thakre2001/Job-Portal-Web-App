@@ -41,7 +41,7 @@ const RecruiterProfile = () => {
             }
             fetchRecruiterJobs()
         }
-    }, [user]);
+    }, [user,token]);
 
     // 📷 Handle Photo Upload + Crop
     const handleProfilePhotoChange = (e) => {

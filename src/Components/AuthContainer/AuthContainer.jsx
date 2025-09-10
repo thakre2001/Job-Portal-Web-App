@@ -46,7 +46,7 @@ const AuthContainer = () => {
                         </button>
 
                         <small className="text-muted d-block mt-3">
-                            Trouble logging in? <a href="#">Reset your password</a>
+                            Trouble logging in? <a href="/forgot-password">Reset your password</a>
                         </small>
                     </div>
                 </div>

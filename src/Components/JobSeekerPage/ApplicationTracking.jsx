@@ -44,7 +44,7 @@ export default function ApplicationTracking() {
         }
 
         fetchAppliedJobs()
-    }, [user])
+    }, [user,token])
     return (
         <div className="container" style={{ paddingTop: 100 }}>
             <h2 className="fw-bold mb-4">My Applications</h2>
