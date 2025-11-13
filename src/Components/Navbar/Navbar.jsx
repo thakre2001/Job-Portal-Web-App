@@ -81,7 +81,7 @@ const Navbar = () => {
     <>
       <div className='container-fluid navbar shadow position-fixed'>
         <div className='navbar-container'>
-          <h4 className='text-primary fs-2' onClick={() => navigate('/page/jobpage')}>JobMatch</h4>
+          <Link to={'/'} className='text-primary text-decoration-none fs-2'>JobMatch</Link>
 
           <button
             className="navbar-toggler"
@@ -177,17 +177,23 @@ const Navbar = () => {
                 setShowSidebar(false);
                 setNavOpen(false)
               }}>
-                <i className='fa fa-bar-chart me-2'></i> Profile Performance
+                <button className='border-0 bg-transparent'>
+                  <i className='fa fa-bar-chart me-2'></i> Profile Performance
+                </button>
               </li>
               {
                 (user && user.role === 'USER') &&
                 <>
                   <li className='list-group-item border-0 ps-0' onClick={appliedJobs}>
-                    <i className='fa fa-bar-briefcase me-2'></i> Applied Jobs
+                    <button className='border-0 bg-transparent'>
+                      <i className='fa-solid fa-briefcase me-2'></i> Applied Jobs
+                    </button>
                   </li>
 
                   <li className='list-group-item border-0 ps-0' onClick={savedJobs}>
-                    <i className='fa fa-bar-briefcase me-2'></i> SavedJobs Jobs
+                    <button className='border-0 bg-transparent'>
+                      <i className='fa-solid fa-bookmark me-2'></i> SavedJobs Jobs
+                    </button>
                   </li>
                 </>
               }
@@ -198,10 +204,14 @@ const Navbar = () => {
                   navigate('/setting-page')
                 }}
               >
-                <i className='fa fa-cog me-2'></i> Settings
+                <button className='border-0 bg-transparent'>
+                  <i className='fa fa-cog me-2'></i> Settings
+                </button>
               </li>
               <li className='list-group-item border-0 ps-0 text-danger' onClick={closePage} style={{ cursor: 'pointer' }}>
-                <i className='fa fa-sign-out me-2'></i> Logout
+                <button className='border-0 bg-transparent'>
+                  <i className='fa fa-sign-out me-2'></i> Logout
+                </button>
               </li>
             </ul>
           </div>

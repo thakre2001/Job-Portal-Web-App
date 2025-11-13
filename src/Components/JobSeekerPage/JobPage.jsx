@@ -195,7 +195,7 @@ const JobPage = () => {
                         placeholder="Search by job title, company, or location"
                         className="form-control w-25"
                     />
-                    <select className="form-select"
+                    <select className="form-select cursor-pointer"
                         style={{ width: '15%' }}
                         onChange={(e) => handleEmployementTypeSearch(e.target.value)}
                         value={employementFilter}
@@ -207,7 +207,7 @@ const JobPage = () => {
                         <option value="contract">Contract</option>
                         <option value="freelance">Freelance</option>
                     </select>
-                    <select className="form-select"
+                    <select className="form-select cursor-pointer"
                         style={{ width: '15%' }}
                         onChange={(e) => handleExperienceSearch(e.target.value)}
                         value={experienceFilter}
@@ -256,7 +256,7 @@ const JobPage = () => {
                                                 {
                                                     !job.alreadyApplied && (
                                                         <i
-                                                            className={`fa-${(jobSaved.some((saved) => saved.jobId === job.jobId) ? "solid" : "regular")} fa-bookmark text-primary fs-3`}
+                                                            className={`fa-${(jobSaved.some((saved) => saved.jobId === job.jobId) ? "solid" : "regular")} cursor-pointer fa-bookmark text-primary fs-3`}
                                                             onClick={() => {
                                                                 if (jobSaved.some((saved) => saved.jobId === job.jobId)) {
                                                                     handleRemoveJob(job.jobId)

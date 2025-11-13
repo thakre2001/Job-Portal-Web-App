@@ -64,7 +64,7 @@ const EducationForm = () => {
                   <h3 className="font-bold mb-2">
                     Edit Education
                   </h3>
-                  <i className="fa fa-trash text-danger fs-5"
+                  <i className="fa fa-trash text-danger fs-5 cursor-pointer"
                     onClick={() => handleDeleteEdu(edu.id)}
                   ></i>
                 </div>
@@ -144,7 +144,7 @@ const EducationForm = () => {
                 <div className="d-flex flex-column">
                   <div className="d-flex gap-2 mt-1 align-items-center">
                     <strong>{edu.educationType}</strong>
-                    <i className="fa fa-pen me-1 text-primary"
+                    <i className="fa fa-pen me-1 text-primary cursor-pointer"
                       onClick={() => {
                         setEditingEdu(edu);
                         setForm(edu);

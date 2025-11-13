@@ -265,7 +265,6 @@ const Profile = () => {
           <EducationForm />
         </div>
 
-        {/* ===== Skills Section ===== */}
         <div className="skills-section bg-white p-4 shadow-md">
           <h5>Skills</h5>
           <div className="d-flex flex-wrap gap-2 mb-2">

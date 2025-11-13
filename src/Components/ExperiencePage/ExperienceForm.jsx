@@ -76,7 +76,7 @@ const ExperienceForm = () => {
               <div>
                 <div className="d-flex justify-content-between align-items-center">
                   <h3>Edit experience</h3>
-                  <i className="fa fa-trash text-danger"
+                  <i className="fa fa-trash text-danger cursor-pointer"
                     onClick={() => handleDeleteExp(exp.id)}
                   ></i>
                 </div>
@@ -154,7 +154,7 @@ const ExperienceForm = () => {
                 <div className="d-flex flex-column">
                   <div className="d-flex gap-3 align-items-center">
                     <strong>{exp.jobTitle}</strong>
-                    <i className="fa fa-pen me-1 text-primary"
+                    <i className="fa fa-pen me-1 text-primary cursor-pointer"
                       onClick={() => {
                         setEditingExp(exp);
                         setForm(exp);
