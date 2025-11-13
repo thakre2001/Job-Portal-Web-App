@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Step1 from './RecruiterForm1'
 import Step2 from './RecruiterForm2'
@@ -8,44 +8,46 @@ import Step5 from './RecruiterForm5'
 import Step6 from './RecruiterReview'
 import * as Yup from "yup";
 
-
 const RecruiterRegistration = () => {
-    const [step, setStep] = useState(1)
-    const [formData, setFormData] = useState({
-        // Step 1: Company Information
-        companyId:null,
-        companyName: '',
-        companyWebsite: '',
-        industryType: '',
-        companySize: '',
-        companyDescription: '',
-        companyLogo: null, // file upload
+    const [step, setStep] = useState(() => {
+        const currenStep = localStorage.getItem('currentStep')
+        return currenStep ? JSON.parse(currenStep) : 1
+    })
 
-        // Step 2: Recruiter / Contact Details
-        recruiterName: '',
-        recruiterEmail: '',
-        recruiterPhone: '',
-        recruiterDesignation: '',
-        alternateContact: '',
+    const [formData, setFormData] = useState(() => {
+        const savedData = localStorage.getItem('formData')
+        return savedData ? JSON.parse(savedData) :
+            {
+                existingCompany: [],
+                companyId: null,
+                companyName: '',
+                companyWebsite: '',
+                industryType: '',
+                companySize: '',
+                companyDescription: '',
+                companyLogo: null,
 
-        // Step 3: Office Address
-        country: '',
-        state: '',
-        city: '',
-        streetAddress: '',
-        postalCode: '',
+                recruiterName: '',
+                recruiterImage: null,
+                recruiterEmail: '',
+                recruiterPhone: '',
+                recruiterDesignation: '',
+                alternateContact: '',
 
-        // Step 4: Account Credentials
-        password: '',
-        confirmPassword: '',
+                country: '',
+                state: '',
+                city: '',
+                streetAddress: '',
+                postalCode: '',
 
-        // Step 5: Optional Fields (optional additions)
-        gstNumber: '',
-        panNumber: '',
-        linkedinProfile: '',
-        hiringPlan: '', // e.g., "Occasional", "Monthly", "High-volume"
+                password: '',
+                confirmPassword: '',
 
-
+                gstNumber: '',
+                panNumber: '',
+                linkedinProfile: '',
+                hiringPlan: '',
+            }
     })
 
     const [errors, setErrors] = useState({});
@@ -83,11 +85,11 @@ const RecruiterRegistration = () => {
     const validateStep = async () => {
         const schema = stepSchemas[step];
 
-        if(step ===1 && formData.companyId){
+        if (step === 1 && formData.companyId) {
             setErrors({})
             return true;
         }
-        if (!schema) return true; // skip validation if no schema (e.g. Step5)
+        if (!schema) return true;
 
         try {
             await schema.validate(formData, { abortEarly: false });
@@ -111,11 +113,20 @@ const RecruiterRegistration = () => {
 
     const nextStep = async () => {
         const valid = await validateStep();
-        if(valid) setStep(step + 1);
+        if (valid) setStep(step + 1);
     };
 
+    useEffect(()=>{
+        localStorage.setItem('currentStep', JSON.stringify(step))
+    },[step])
 
     const previousStep = () => setStep(step - 1)
+
+    useEffect(() => {
+        localStorage.setItem('formData', JSON.stringify(formData))
+        console.log('local storage form', localStorage.getItem('formData'));
+
+    }, [formData])
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -123,7 +134,19 @@ const RecruiterRegistration = () => {
         setErrors((prevError) => ({ ...prevError, [name]: undefined }));
     }
 
-    
+    const handleFileChange = (e) => {
+        const { files, name } = e.target
+        if (files && files[0]) {
+            const reader = new FileReader()
+
+            reader.onloadend = () => {
+                setFormData((prev) => ({
+                    ...prev, [name]: reader.result
+                }))
+            }
+            reader.readAsDataURL(files[0])
+        }
+    }
 
     const renderForm = () => {
         const commonProps = {
@@ -134,7 +157,8 @@ const RecruiterRegistration = () => {
             touched,
             nextStep,
             previousStep,
-            setFormData
+            setFormData,
+            handleFileChange,
         };
 
         switch (step) {
@@ -144,15 +168,52 @@ const RecruiterRegistration = () => {
             case 4: return <Step4 {...commonProps} />
             case 5: return <Step5 {...commonProps} />
             case 6: return <Step6 {...commonProps} />
-            default: return <Step1 {...commonProps}/>
+            default: return <Step1 {...commonProps} />
         }
     }
 
     return (
         <>
             <div className="recruiter-registration-form w-100" style={{ paddingTop: 100 }}>
-                <div className="form-content w-100">
-                    <h1>Welcome to recruiter page</h1>
+                <div className="form-content w-100 px-5">
+                    <h1 className="text-center mb-4">Welcome to recruiter page</h1>
+
+                    <div className="d-flex justify-content-between mb-4">
+                        {["Company Info", "Contact Details", "Office Address", "Credentials", "Optional", "Review"].map((label, index) => {
+                            const stepNumber = index + 1;
+                            return (
+                                <div key={index} className="text-center flex-fill position-relative">
+                                    <div
+                                        className={`rounded-circle mb-1 ${step >= stepNumber ? "bg-warning text-dark" : "border border-secondary text-secondary"}`}
+                                        style={{
+                                            width: 30,
+                                            height: 30,
+                                            lineHeight: "30px",
+                                            margin: "0 auto"
+                                        }}
+                                    >
+                                        {stepNumber}
+                                    </div>
+                                    <div style={{ fontSize: 12, color: step >= stepNumber ? "#000" : "#6c757d" }}>{label}</div>
+
+                                    {index !== 5 && (
+                                        <div
+                                            style={{
+                                                position: "absolute",
+                                                top: 15,
+                                                right: 0,
+                                                width: "100%",
+                                                height: 2,
+                                                backgroundColor: "#6c757d",
+                                                zIndex: -1
+                                            }}
+                                        />
+                                    )}
+                                </div>
+                            )
+                        })}
+                    </div>
+
                     {renderForm()}
                 </div>
             </div>

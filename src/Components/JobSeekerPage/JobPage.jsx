@@ -94,7 +94,7 @@ const JobPage = () => {
         }
 
         setFilteredJobs(filtered)
-    }, [employementFilter, experienceFilter, searchJob])
+    }, [employementFilter, experienceFilter, searchJob,jobs])
 
     useEffect(() => {
         // console.log("employement Type filter", employementFilter);

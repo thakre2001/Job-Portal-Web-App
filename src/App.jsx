@@ -30,70 +30,71 @@ import SavedJobs from './Components/JobSeekerPage/SavedJobs';
 function AppContent() {
   return (
     <>
-      <ScrollToTop />
-      <Navbar />
-      <Routes>
-        <Route path='/' element={<Navigate to="/page/jobpage" />} />
-        <Route path='/page/login' element={
-          <PublicRoute>
-            <AuthContainer />
-          </PublicRoute>
-        } />
-        <Route path='/page/home' element={<Home />} />
-        <Route path='/page/register' element={<Register />} />
-        <Route path='/page/jobpage' element={<JobPage />} />
-        <Route path='/page/jobseeker-profile' element={
-          <ProtectedRoute roles={["USER"]} >
-            <Profile />
-          </ProtectedRoute>
-        } />
+        <ScrollToTop />
+        <Navbar />
+        <div className="main-content">
+          <Routes>
+            <Route path='/' element={<Navigate to="/page/jobpage" />} />
+            <Route path='/page/login' element={
+              <PublicRoute>
+                <AuthContainer />
+              </PublicRoute>
+            } />
+            <Route path='/page/home' element={<Home />} />
+            <Route path='/page/register' element={<Register />} />
+            <Route path='/page/jobpage' element={<JobPage />} />
+            <Route path='/page/jobseeker-profile' element={
+              <ProtectedRoute roles={["USER"]} >
+                <Profile />
+              </ProtectedRoute>
+            } />
 
-        <Route path='/profile-performance' element={<ProfilePerformance />} />
-        <Route path='/setting-page' element={<SettingsPage />} />
-        <Route path='/page/recruiter-profile' element={
-          <ProtectedRoute roles={["RECRUITER"]}>
-            <RecruiterProfile />
-          </ProtectedRoute>
-        } />
-        <Route path='/page/jobpostform' element={
-          <ProtectedRoute roles={["RECRUITER"]} >
-            <JobPostForm />
-          </ProtectedRoute>
-        } />
-        <Route path='/page/contactus' element={<ContactUs />} />
-        <Route path='/page/helpcenter' element={<HelpCenter />} />
-        <Route path='/page/resumebuilder' element={<ResumeBuilder />} />
-        <Route path='/page/recruiterform' element={<RecruiterRegistration />} />
-        <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path='/job-seeker-applied-jobs' element={
-          <ProtectedRoute roles={["USER"]}>
-            <ApplicationTracking />
-          </ProtectedRoute>
-        } />
-        <Route path='/job-seeker-saved-jobs' element={
-          <ProtectedRoute roles={["USER"]}>
-            <SavedJobs />
-          </ProtectedRoute>
-        } />
-        <Route path='/apply/:jobId' element={<ApplyJob />} />
+            <Route path='/profile-performance' element={<ProfilePerformance />} />
+            <Route path='/setting-page' element={<SettingsPage />} />
+            <Route path='/page/recruiter-profile' element={
+              <ProtectedRoute roles={["RECRUITER"]}>
+                <RecruiterProfile />
+              </ProtectedRoute>
+            } />
+            <Route path='/page/jobpostform' element={
+              <ProtectedRoute roles={["RECRUITER"]} >
+                <JobPostForm />
+              </ProtectedRoute>
+            } />
+            <Route path='/page/contactus' element={<ContactUs />} />
+            <Route path='/page/helpcenter' element={<HelpCenter />} />
+            <Route path='/page/resumebuilder' element={<ResumeBuilder />} />
+            <Route path='/page/recruiterform' element={<RecruiterRegistration />} />
+            <Route path='/forgot-password' element={<ForgotPassword />} />
+            <Route path='/job-seeker-applied-jobs' element={
+              <ProtectedRoute roles={["USER"]}>
+                <ApplicationTracking />
+              </ProtectedRoute>
+            } />
+            <Route path='/job-seeker-saved-jobs' element={
+              <ProtectedRoute roles={["USER"]}>
+                <SavedJobs />
+              </ProtectedRoute>
+            } />
+            <Route path='/apply/:jobId' element={<ApplyJob />} />
 
-      </Routes>
-      <Footer />
+          </Routes>
+        </div>
+        <Footer />
 
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={true}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-        limit={3}
-      />
-
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+          limit={3}
+        />
     </>
   );
 }

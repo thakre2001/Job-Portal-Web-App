@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Services } from '../../BackendAPIs/Services';
 
-const RecruiterForm1 = ({ formData, setFormData, handleChange, nextStep, errors, handleBlur, touched }) => {
+const RecruiterForm1 = ({ formData, setFormData, handleChange, validateStep, nextStep, errors, handleBlur, touched }) => {
   const [companies, setCompanies] = useState([]);
-  const [selectedCompany, setSelectedCompany] = useState('');
+  const [selectedCompany, setSelectedCompany] = useState(formData);
 
   useEffect(() => {
     // Fetch registered companies from backend
@@ -62,7 +62,9 @@ const RecruiterForm1 = ({ formData, setFormData, handleChange, nextStep, errors,
             onChange={handleCompanySelect}
           >
             <option value="">-- Select Company --</option>
-            {companies.map((company) => (
+            {companies
+            .sort()
+            .map((company) => (
               <option key={company.id} value={company.id}>
                 {company.companyName}
               </option>
@@ -188,6 +190,7 @@ const RecruiterForm1 = ({ formData, setFormData, handleChange, nextStep, errors,
           <button
             className="btn btn-primary px-5 py-2 fw-semibold shadow-sm"
             onClick={nextStep}
+            disabled={validateStep}
           >
             Next →
           </button>

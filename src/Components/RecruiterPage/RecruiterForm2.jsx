@@ -1,6 +1,6 @@
 import React from 'react';
 
-const RecruiterForm2 = ({ formData, handleChange, handleBlur, nextStep, previousStep, errors, touched }) => {
+const RecruiterForm2 = ({ formData, handleChange, handleFileChange, handleBlur, validateStep,nextStep, previousStep, errors, touched }) => {
     return (
         <div className="card shadow-lg p-4 border-0 rounded-3 recruiter-form">
             <h4 className="mb-4 fw-bold text-primary">Contact Details</h4>
@@ -21,6 +21,15 @@ const RecruiterForm2 = ({ formData, handleChange, handleBlur, nextStep, previous
                     {touched.recruiterName && errors.recruiterName && (
                         <div className="invalid-feedback">{errors.recruiterName}</div>
                     )}
+                </div>
+                <div>
+                    <label htmlFor="recruiterImage">Profile Photo</label>
+                    <input type="file" onChange={handleFileChange} name="recruiterImage" id="" />
+                    {
+                        formData.recruiterImage && (
+                            <img src={formData.recruiterImage} className='img-fluid mt-2' width={'40%'} height={'40%'} alt="" />
+                        )
+                    }
                 </div>
 
                 {/* Email */}
@@ -91,7 +100,9 @@ const RecruiterForm2 = ({ formData, handleChange, handleBlur, nextStep, previous
                 {/* Navigation Buttons */}
                 <div className='d-flex justify-content-between my-4'>
                     <button className='btn btn-lg btn-secondary px-5 py-2' onClick={previousStep}>Back</button>
-                    <button className='btn btn-lg btn-primary px-5 py-2' onClick={nextStep}>Next</button>
+                    <button className='btn btn-lg btn-primary px-5 py-2'
+                    disabled={validateStep}
+                     onClick={nextStep}>Next</button>
                 </div>
             </form>
         </div>

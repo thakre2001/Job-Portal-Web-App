@@ -4,19 +4,19 @@ import { Services } from '../../BackendAPIs/Services';
 import { UserContext } from '../UserContext';
 import { useNavigate } from 'react-router-dom';
 
-const RecruiterReview = ({ formData, previousStep,setFormData }) => {
-  const {login}=useContext(UserContext);
+const RecruiterReview = ({ formData, previousStep, setFormData }) => {
+  const { login } = useContext(UserContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
-  const navigate=useNavigate()
+  const navigate = useNavigate()
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
     setSubmitMessage('');
 
     try {
-      const res=await Services.recruiterRegistration(formData);
-      if(res.status !==200){
+      const res = await Services.recruiterRegistration(formData);
+      if (res.status !== 200) {
         alert("Something Went wrong try again")
         return;
       }
@@ -45,8 +45,9 @@ const RecruiterReview = ({ formData, previousStep,setFormData }) => {
         gstNumber: '',
         panNumber: '',
         linkedinProfile: '',
-        hiringPlan: '', 
-    })
+        hiringPlan: '',
+      })
+      localStorage.removeItem('formData')
       navigate('/page/jobpage')
     } catch (error) {
       console.error(error);
